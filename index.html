@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ComputerHoy · Promos de Electrodomésticos</title>
+  <meta name="description" content="Blog promotor de electrodomésticos con ofertas, novedades y filtrado por categorías y etiquetas.">
+
+  <!-- Bootstrap 5.3.8 CSS (CDN oficial con SRI) -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZ"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css-->
+  <link rel="stylesheet" href="assets/css/styles.css"-->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom sticky-top">
+    <div class="container">
+      #
+        <span class="text-primary">ComputerHoy</span> · Promos
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Alternar navegación">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div id="navMain" class="collapse navbar-collapse">
+        <!-- Buscador -->
+        <form class="d-flex ms-auto me-3" role="search" id="form-busqueda">
+          <label class="visually-hidden" for="input-buscar">Buscar</label>
+          <input class="form-control" type="search" placeholder="Buscar productos..." aria-label="Buscar" id="input-buscar">
+        </form>
+
+        <!-- Simulador simple de sesión admin (para desarrollo) -->
+        <div class="d-flex align-items-center gap-2">
+          <div class="form-check form-switch m-0">
+            <input class="form-check-input" type="checkbox" role="switch" id="switch-admin" aria-label="Cambiar a modo administrador">
+            <label class="form-check-label small" for="switch-admin">Admin</label>
+          </div>
+          <!-- Botón: Nuevo producto (solo admin) -->
+          <button class="btn btn-primary btn-sm admin-only" data-bs-toggle="modal" data-bs-target="#modalProducto">
+            Nuevo producto
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CONTENIDO -->
+  <main class="container my-3">
+    <div class="row g-3">
+      <!-- Columna izquierda: Filtros -->
+      <aside class="col-12 col-lg-3">
+        <div class="card">
+          <div class="card-header fw-semibold">Categorías</div>
+          <div class="list-group list-group-flush" id="lista-categorias">
+            <!-- Se inyecta desde JS -->
+          </div>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-header fw-semibold">Etiquetas</div>
+          <div class="card-body" id="contenedor-etiquetas">
+            <!-- Badges de etiquetas desde JS -->
+          </div>
+        </div>
+      </aside>
+
+      <!-- Centro: Feed de productos -->
+      <section class="col-12 col-lg-6" id="col-feed">
+        <div id="feed" class="d-flex flex-column gap-3">
+          <!-- Tarjetas de productos desde JS -->
+        </div>
+        <div id="mensaje-vacio" class="text-center text-muted py-5 d-none">
+          No se encontraron productos con los filtros actuales.
+        </div>
+      </section>
+
+      <!-- Derecha: Recomendados -->
+      <aside class="col-12 col-lg-3">
+        <div class="card">
+          <div class="card-header fw-semibold">Recomendados</div>
+          <div class="list-group list-group-flush" id="lista-recomendados">
+            <!-- Se inyecta desde JS -->
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-top py-4">
+    <div class="container small text-muted">
+      <div class="d-flex flex-column flex-md-row justify-content-between gap-2">
+        <span>© 2025 ComputerHoy · Proyecto académico (promoción de electrodomésticos)</span>
+        <span>Hecho con Bootstrap 5</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL: Crear/Editar producto (solo admin) -->
+  <div class="modal fade" id="modalProducto" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <form class="modal-content" id="form-producto">
+        <div class="modal-header">
+          <h5 class="modal-title" id="titulo-modal">Nuevo producto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="prod-id" />
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label" for="prod-nombre">Nombre</label>
+              <input type="text" class="form-control" id="prod-nombre" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="prod-categoria">Categoría</label>
+              <select class="form-select" id="prod-categoria" required>
+                <!-- opciones desde JS -->
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="prod-precio">Precio (S/)</label>
+              <input type="number" step="0.01" class="form-control" id="prod-precio" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="prod-badge">Badge</label>
+              <select class="form-select" id="prod-badge">
+                <option value="">(ninguno)</option>
+                <option value="oferta">oferta</option>
+                <option value="nuevo">nuevo</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="prod-etiquetas">Etiquetas (separadas por coma)</label>
+              <input type="text" class="form-control" id="prod-etiquetas" placeholder="smart, energia, 8kg">
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="prod-imagen">Imagen (URL temporal)</label>
+              <input type="url" class="form-control" id="prod-imagen" placeholder="https://...png" required>
+              <div class="form-text">Por ahora usaremos URL; más adelante subiremos archivos con backend.</div>
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="prod-descripcion">Descripción</label>
+              <textarea class="form-control" id="prod-descripcion" rows="3" placeholder="Resumen de características"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <span class="text-muted me-auto small">Al publicar verás “Se publicó correctamente”.</span>
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Publicar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST (feedback) -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="toast-ok" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">Se publicó correctamente.</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5.3.8 JS bundle (con Popper) - colocar antes de cerrar </body> -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/Bpt>
+  assets/js/app.js</script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+/* Ajustes generales */
+body {
+  background-color: #f5f6f8;
+}
+
+/* Ocultar por defecto controles solo para administradores */
+.admin-only {
+  display: none;
+}
+
+/* Tarjetas estilo “post” */
+.card-producto .card-img-top {
+  object-fit: cover;
+  height: 220px;
+}
+
+.card-producto .badge + .badge {
+  margin-left: .25rem;
+}
+
+/* Sidebar sticky (cuando hay altura suficiente) */
+@media (min-width: 992px) {
+  aside .card {
+    position: sticky;
+    top: 84px; /* debajo de navbar */
+  }
+}
+
+/* Utilidades */
+.cursor-pointer { cursor: pointer; }
