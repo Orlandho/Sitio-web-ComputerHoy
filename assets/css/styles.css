@@ -87,3 +87,23 @@ main {
     margin-top: 2rem;
     margin-bottom: 0; /* Quitamos el margen inferior */
 }
+
+/* Estilos para la sección de bienvenida */
+.welcome-section {
+    background-color: #ffffff;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 2rem;
+}
+
+.welcome-image {
+    max-width: 500px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.welcome-section .lead {
+    max-width: 800px;
+    margin: 0 auto;
+    color: #6c757d;
+}
