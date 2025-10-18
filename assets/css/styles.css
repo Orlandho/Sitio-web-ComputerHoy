@@ -65,7 +65,7 @@ footer {
 .navbar {
     box-shadow: 0 2px 4px rgba(0,0,0,.1);
     padding: 1rem 0;
-    position: relative; /* Asegura que la navbar se mueva con el scroll */
+    position: relative;
 }
 
 .navbar .container-fluid {
@@ -74,11 +74,28 @@ footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 1rem;
+    padding: 0 2rem;
+    flex-wrap: nowrap; /* Evita que los elementos se envuelvan */
 }
 
-/* Quita los estilos antiguos de form que ya no necesitamos */
-.navbar form {
+/* Grupos de botones laterales */
+.navbar .btn-group-left,
+.navbar .btn-group-right {
+    flex: 0 0 auto; /* No crece ni se encoge, mantiene su tamaño */
+    display: flex;
+    gap: 0.5rem;
+    min-width: fit-content; /* Asegura que los botones mantengan su ancho mínimo */
+}
+
+/* Contenedor del buscador */
+.search-container {
+    flex: 1; /* Permite que el buscador ocupe el espacio disponible */
+    min-width: 200px; /* Ancho mínimo antes de colapsar */
+    max-width: 500px; /* Ancho máximo para no estirarse demasiado */
+    margin: 0 1rem; /* Mantiene espacio con los botones */
+}
+
+.search-container input {
     width: 100%;
 }
 
@@ -92,18 +109,59 @@ main {
 .welcome-section {
     background-color: #ffffff;
     border-bottom: 1px solid #dee2e6;
-    margin-bottom: 2rem;
 }
 
 .welcome-image {
     max-width: 500px;
+    width: 100%;
     height: auto;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin: 0 auto;
+    display: block;
 }
 
 .welcome-section .lead {
     max-width: 800px;
     margin: 0 auto;
     color: #6c757d;
+}
+
+/* Ajuste para el título */
+.welcome-section h1 {
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+/* Ajustes responsive */
+@media (max-width: 992px) {
+    .navbar .container-fluid {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    .search-container {
+        width: 100%;
+        order: 3;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar .container-fluid {
+        flex-wrap: wrap; /* Permite que los elementos se envuelvan en móviles */
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .btn-group-left,
+    .btn-group-right {
+        order: 1; /* Los botones aparecen primero */
+    }
+
+    .search-container {
+        order: 2; /* El buscador aparece después */
+        flex-basis: 100%; /* Ocupa todo el ancho */
+        margin: 0.5rem 0;
+    }
 }

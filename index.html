@@ -24,31 +24,29 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
             <div class="container-fluid">
-                <!-- Botones lado izquierdo -->
-                <div class="navbar-nav me-auto" style="width: 200px;">
-                    <a class="btn btn-outline-light me-2" href="#">Inicio</a>
-                    <a class="btn btn-outline-light" href="#">Categoría</a>
+                <!-- Botones izquierdos -->
+                <div class="btn-group-left">
+                    <button class="btn btn-outline-light">Inicio</button>
+                    <button class="btn btn-outline-light">Categoría</button>
                 </div>
 
                 <!-- Buscador centrado -->
-                <div class="d-flex justify-content-center" style="width: 100%; max-width: 500px;">
-                    <form class="w-100">
-                        <input class="form-control" type="search" placeholder="Buscar productos..." aria-label="Buscar">
-                    </form>
+                <div class="search-container">
+                    <input class="form-control" type="search" placeholder="Buscar productos..." aria-label="Buscar">
                 </div>
 
-                <!-- Botón Login lado derecho -->
-                <div class="navbar-nav ms-auto" style="width: 200px; justify-content: flex-end; padding-right: 35px;">
+                <!-- Botón derecho -->
+                <div class="btn-group-right">
                     <button class="btn btn-primary">Login</button>
                 </div>
             </div>
         </nav>
     </header>
 
-    <!-- Sección de bienvenida -->
-    <section class="welcome-section text-center py-5">
-        <h1 class="display-4 mb-4">¡Bienvenido a ComputerHoy!</h1>
-        <div class="container">
+    <!-- Sección de bienvenida (actualizada) -->
+    <section class="welcome-section py-5">
+        <div class="container text-center">
+            <h1 class="display-4 mb-5">¡Bienvenido a ComputerHoy!</h1>
             <img src="assets/images/computerHoy.png" alt="Computadora moderna" class="welcome-image mb-4">
             <p class="lead">
                 Aquí comienza tu conexión con lo mejor del mundo electrónico.<br>
