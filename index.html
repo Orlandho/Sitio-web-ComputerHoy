@@ -22,20 +22,22 @@
 <body>
   <!-- Barra de navegación fija -->
   <nav class="navbar navbar-expand-lg bg-dark navbar-dark fixed-top">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
+    <div class="container-fluid">
       <!-- Botones lado izquierdo -->
-      <div class="d-flex">
+      <div class="navbar-nav me-auto" style="width: 200px;">
         <a class="btn btn-outline-light me-2" href="#">Inicio</a>
         <a class="btn btn-outline-light" href="#">Categoría</a>
       </div>
 
       <!-- Buscador centrado -->
-      <form class="d-flex justify-content-center flex-grow-1 mx-4">
-        <input class="form-control w-75" type="search" placeholder="Buscar productos..." aria-label="Buscar">
-      </form>
+      <div class="d-flex justify-content-center" style="width: 100%; max-width: 500px;">
+        <form class="w-100">
+          <input class="form-control" type="search" placeholder="Buscar productos..." aria-label="Buscar">
+        </form>
+      </div>
 
       <!-- Botón Login lado derecho -->
-      <div>
+      <div class="navbar-nav ms-auto" style="width: 200px; justify-content: flex-end;">
         <button class="btn btn-primary">Login</button>
       </div>
     </div>

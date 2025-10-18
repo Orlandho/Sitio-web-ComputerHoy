@@ -59,11 +59,15 @@ footer {
 .navbar .container-fluid {
     max-width: 1200px;
     margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
 }
 
-/* Ajuste para el formulario de búsqueda */
+/* Quita los estilos antiguos de form que ya no necesitamos */
 .navbar form {
-    max-width: 600px;
+    width: 100%;
 }
 
 /* Ajuste para el contenido principal */
