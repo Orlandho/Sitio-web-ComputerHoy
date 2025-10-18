@@ -28,3 +28,26 @@ body {
 
 /* Utilidades */
 .cursor-pointer { cursor: pointer; }
+
+/* Centrado de publicaciones */
+#feed {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 200px); /* Ajusta según el tamaño de tu navbar */
+}
+
+/* Estilos para el footer */
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+    padding: 1rem 0;
+    border-top: 1px solid #dee2e6;
+}
+
+/* Añadir margen inferior al contenido principal para que no se solape con el footer */
+main {
+    margin-bottom: 80px;
+}
