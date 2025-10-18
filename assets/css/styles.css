@@ -1,9 +1,20 @@
 /* Ajustes generales */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
-  background-color: #f5f6f8;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+    background-color: #f5f6f8;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Contenedor principal */
+main {
+    flex: 1;
+    padding-top: 20px;
 }
 
 /* Ocultar por defecto controles solo para administradores */
@@ -54,6 +65,7 @@ footer {
 .navbar {
     box-shadow: 0 2px 4px rgba(0,0,0,.1);
     padding: 1rem 0;
+    position: relative; /* Asegura que la navbar se mueva con el scroll */
 }
 
 .navbar .container-fluid {

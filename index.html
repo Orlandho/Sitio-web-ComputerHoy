@@ -20,31 +20,30 @@
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-  <!-- Barra de navegación fija -->
-  <nav class="navbar navbar-expand-lg bg-dark navbar-dark fixed-top">
-    <div class="container-fluid">
-      <!-- Botones lado izquierdo -->
-      <div class="navbar-nav me-auto" style="width: 200px;">
-        <a class="btn btn-outline-light me-2" href="#">Inicio</a>
-        <a class="btn btn-outline-light" href="#">Categoría</a>
-      </div>
+    <!-- Header con la barra de navegación -->
+    <header>
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+            <div class="container-fluid">
+                <!-- Botones lado izquierdo -->
+                <div class="navbar-nav me-auto" style="width: 200px;">
+                    <a class="btn btn-outline-light me-2" href="#">Inicio</a>
+                    <a class="btn btn-outline-light" href="#">Categoría</a>
+                </div>
 
-      <!-- Buscador centrado -->
-      <div class="d-flex justify-content-center" style="width: 100%; max-width: 500px;">
-        <form class="w-100">
-          <input class="form-control" type="search" placeholder="Buscar productos..." aria-label="Buscar">
-        </form>
-      </div>
+                <!-- Buscador centrado -->
+                <div class="d-flex justify-content-center" style="width: 100%; max-width: 500px;">
+                    <form class="w-100">
+                        <input class="form-control" type="search" placeholder="Buscar productos..." aria-label="Buscar">
+                    </form>
+                </div>
 
-      <!-- Botón Login lado derecho -->
-      <div class="navbar-nav ms-auto" style="width: 200px; justify-content: flex-end;">
-        <button class="btn btn-primary">Login</button>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Espaciador para compensar la navbar fija -->
-  <div style="margin-top: 70px;"></div>
+                <!-- Botón Login lado derecho -->
+                <div class="navbar-nav ms-auto" style="width: 200px; justify-content: flex-end; padding-right: 35px;">
+                    <button class="btn btn-primary">Login</button>
+                </div>
+            </div>
+        </nav>
+    </header>
 
   <!-- CONTENIDO -->
   <main class="container my-3">
@@ -64,8 +63,7 @@
   <!-- FOOTER -->
   <footer class="border-top py-4">
     <div class="container text-center small text-muted">
-      <p class="mb-0">© 2025 ComputerHoy · Proyecto académico (promoción de electrodomésticos)</p>
-      <p class="mb-0">Hecho con Bootstrap 5</p>
+      <p class="mb-0">© 2025 ComputerHoy · promoción de electrodomésticos</p>
     </div>
   </footer>
 
