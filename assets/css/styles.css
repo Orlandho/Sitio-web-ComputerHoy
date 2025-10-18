@@ -50,7 +50,24 @@ footer {
     margin-top: auto;
 }
 
-/* Ajuste del contenedor principal */
+/* Estilos para la barra de navegación */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    padding: 1rem 0;
+}
+
+.navbar .container-fluid {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Ajuste para el formulario de búsqueda */
+.navbar form {
+    max-width: 600px;
+}
+
+/* Ajuste para el contenido principal */
 main {
+    margin-top: 2rem;
     margin-bottom: 0; /* Quitamos el margen inferior */
 }
