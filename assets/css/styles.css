@@ -139,7 +139,8 @@ main {
 /* Estilos para la sección de bienvenida */
 .welcome-section {
     background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
-    padding-top: 8rem !important; /* Aumentamos aún más el padding superior */
+    padding-top: 12rem !important; /* Aumentamos significativamente el padding superior */
+    margin-top: 2rem; /* Agregamos margen adicional */
     padding-bottom: 4rem;
     border-bottom: 1px solid #e2e8f0;
     display: flex;
