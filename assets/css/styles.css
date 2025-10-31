@@ -1,3 +1,12 @@
+/* Variables de colores */
+:root {
+    --primary-color: #2563eb;
+    --secondary-color: #1e40af;
+    --background-light: #f8fafc;
+    --text-dark: #1e293b;
+    --text-light: #64748b;
+}
+
 /* Ajustes generales */
 html, body {
     height: 100%;
@@ -6,9 +15,11 @@ html, body {
 }
 
 body {
-    background-color: #f5f6f8;
+    background-color: var(--background-light);
     display: flex;
     flex-direction: column;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: var(--text-dark);
 }
 
 /* Contenedor principal */
@@ -47,24 +58,29 @@ main {
 #feed {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-    padding: 1.5rem 0;
+    gap: 2rem;
+    padding: 2rem 0;
 }
 
 /* Estilos para el footer */
 footer {
     position: relative; /* Cambiamos de fixed a relative */
     width: 100%;
-    background-color: white;
-    padding: 1rem 0;
-    border-top: 1px solid #dee2e6;
+    background-color: #ffffff;
+    padding: 2rem 0;
+    border-top: 1px solid #e2e8f0;
     margin-top: auto;
+}
+
+footer p {
+    color: var(--text-light);
 }
 
 /* Estilos para la barra de navegación */
 .navbar {
-    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    background: linear-gradient(to right, #1e40af, #2563eb) !important;
     padding: 1rem 0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     position: relative;
 }
 
@@ -76,6 +92,12 @@ footer {
     align-items: center;
     padding: 0 2rem;
     flex-wrap: nowrap; /* Evita que los elementos se envuelvan */
+}
+
+.navbar .btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
 }
 
 /* Grupos de botones laterales */
@@ -97,6 +119,15 @@ footer {
 
 .search-container input {
     width: 100%;
+    border-radius: 20px;
+    padding: 0.5rem 1.5rem;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.search-container input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
 }
 
 /* Ajuste para el contenido principal */
@@ -107,30 +138,57 @@ main {
 
 /* Estilos para la sección de bienvenida */
 .welcome-section {
-    background-color: #ffffff;
-    border-bottom: 1px solid #dee2e6;
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+    padding: 4rem 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.welcome-section h1 {
+    color: var(--text-dark);
+    font-weight: 700;
+    margin-bottom: 2.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .welcome-image {
-    max-width: 500px;
-    width: 100%;
+    max-width: 600px;
+    width: 90%;
     height: auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    margin: 0 auto;
-    display: block;
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.welcome-image:hover {
+    transform: translateY(-5px);
 }
 
 .welcome-section .lead {
+    color: var(--text-light);
+    font-size: 1.2rem;
+    line-height: 1.8;
     max-width: 800px;
-    margin: 0 auto;
-    color: #6c757d;
+    margin: 2rem auto 0;
 }
 
-/* Ajuste para el título */
-.welcome-section h1 {
-    margin: 0 auto;
-    max-width: 800px;
+/* Estilos para botones */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    transform: translateY(-1px);
+}
+
+/* Efectos hover generales */
+a, button {
+    transition: all 0.2s ease;
 }
 
 /* Ajustes responsive */
@@ -163,5 +221,18 @@ main {
         order: 2; /* El buscador aparece después */
         flex-basis: 100%; /* Ocupa todo el ancho */
         margin: 0.5rem 0;
+    }
+
+    .welcome-section {
+        padding: 2rem 0;
+    }
+
+    .welcome-section h1 {
+        font-size: 2rem;
+    }
+
+    .welcome-section .lead {
+        font-size: 1.1rem;
+        padding: 0 1rem;
     }
 }
