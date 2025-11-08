@@ -21,7 +21,7 @@
 <body>
     <!-- Header con la barra de navegación -->
     <header>
-        <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid">
                 <!-- Botones izquierdos -->
                 <div class="btn-group-left">
@@ -42,39 +42,41 @@
         </nav>
     </header>
 
-    <!-- Sección de bienvenida (actualizada) -->
-    <section class="welcome-section py-5">
-        <div class="container text-center">
-            <h1 class="display-4 mb-5">¡Bienvenido a ComputerHoy!</h1>
-            <img src="assets/images/computerHoy.png" alt="Computadora moderna" class="welcome-image mb-4">
-            <p class="lead">
-                Aquí comienza tu conexión con lo mejor del mundo electrónico.<br>
-                Explora, comenta y comparte las últimas promociones en tecnología como si estuvieras en tu red social favorita.
-            </p>
-        </div>
-    </section>
+    <!-- Contenedor principal -->
+    <div class="page-content">
+        <!-- Sección de bienvenida -->
+        <section class="welcome-section">
+            <div class="container text-center">
+                <h1 class="display-4">¡Bienvenido a ComputerHoy!</h1>
+                <img src="assets/images/computerHoy.png" alt="Computadora moderna" class="welcome-image">
+                <p class="lead">
+                    Aquí comienza tu conexión con lo mejor del mundo electrónico.<br>
+                    Explora, comenta y comparte las últimas promociones en tecnología como si estuvieras en tu red social favorita.
+                </p>
+            </div>
+        </section>
 
-    <!-- CONTENIDO -->
-    <main class="container my-3">
-    <div class="row g-3">
-      <!-- Centro: Feed de productos -->
-      <section class="col-12" id="col-feed">
-        <div id="feed" class="d-flex flex-column gap-3">
-          <!-- Tarjetas de productos desde JS -->
-        </div>
-        <div id="mensaje-vacio" class="text-center text-muted py-5 d-none">
-          No se encontraron productos con los filtros actuales.
-        </div>
-      </section>
+        <!-- CONTENIDO -->
+        <main class="container">
+            <div class="row">
+                <section class="col-12" id="col-feed">
+                    <div id="feed" class="d-flex flex-column gap-3">
+                        <!-- Tarjetas de productos desde JS -->
+                    </div>
+                    <div id="mensaje-vacio" class="text-center text-muted py-5 d-none">
+                        No se encontraron productos con los filtros actuales.
+                    </div>
+                </section>
+            </div>
+        </main>
     </div>
-  </main>
 
-  <!-- FOOTER -->
-  <footer class="border-top py-4">
-    <div class="container text-center small text-muted">
-      <p class="mb-0">© 2025 ComputerHoy · promoción de electrodomésticos</p>
-    </div>
-  </footer>
+    <!-- FOOTER -->
+    <footer class="border-top">
+        <div class="container text-center small text-muted">
+          <p class="mb-0">© 2025 ComputerHoy · promoción de electrodomésticos</p>
+        </div>
+    </footer>
 
   <!-- Bootstrap 5.3.8 JS bundle (con Popper) -->
   <script

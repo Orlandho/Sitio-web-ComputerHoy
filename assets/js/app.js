@@ -72,6 +72,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (formProd) formProd.addEventListener("submit", onSubmitProducto);
   if (modalEl) modalEl.addEventListener("hidden.bs.modal", resetFormProducto);
+
+  ajustarEspacioNavbar();
+
+  // reajustar si el usuario cambia tamaño de ventana
+  window.addEventListener('resize', ajustarEspacioNavbar);
 });
 
 // ------ Renderizadores ------
@@ -353,3 +358,12 @@ function loadProductos() {
 
 // Llamada inicial (si antes se llamaba desde aquí)
 document.addEventListener('DOMContentLoaded', loadProductos);
+
+function ajustarEspacioNavbar() {
+  const nav = document.querySelector('.navbar');
+  if (!nav) return;
+  // añadir extra para separación visual (en px)
+  const extra = 24;
+  const h = nav.offsetHeight + extra;
+  document.documentElement.style.setProperty('--navbar-space', h + 'px');
+}
