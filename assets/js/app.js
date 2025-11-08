@@ -1,66 +1,77 @@
 // Estado en memoria
 let ADMIN = false;
-let productos = loadProductos();
+let productos = []; // se inicializa después cuando el DOM esté listo
 let filtroCategoria = null;
 let filtroEtiqueta = null;
 let terminoBusqueda = "";
 
-// Atajos DOM
-const listaCategorias = document.getElementById("lista-categorias");
-const contEtiquetas   = document.getElementById("contenedor-etiquetas");
-const listaRecomend   = document.getElementById("lista-recomendados");
-const feed            = document.getElementById("feed");
-const msgVacio        = document.getElementById("mensaje-vacio");
-const inputBuscar     = document.getElementById("input-buscar");
-const switchAdmin     = document.getElementById("switch-admin");
+// Declaraciones de referencias DOM (se asignan en DOMContentLoaded)
+let listaCategorias, contEtiquetas, listaRecomend, feed, msgVacio, inputBuscar, switchAdmin;
+let modalEl, modal, formProd, titleModal, selCat, fId, fNombre, fCat, fPrecio, fBadge, fEtq, fImg, fDesc, toastOk;
 
-// Modal / Form
-const modalEl    = document.getElementById("modalProducto");
-const modal      = new bootstrap.Modal(modalEl);
-const formProd   = document.getElementById("form-producto");
-const titleModal = document.getElementById("titulo-modal");
-const selCat     = document.getElementById("prod-categoria");
-const fId        = document.getElementById("prod-id");
-const fNombre    = document.getElementById("prod-nombre");
-const fCat       = document.getElementById("prod-categoria");
-const fPrecio    = document.getElementById("prod-precio");
-const fBadge     = document.getElementById("prod-badge");
-const fEtq       = document.getElementById("prod-etiquetas");
-const fImg       = document.getElementById("prod-imagen");
-const fDesc      = document.getElementById("prod-descripcion");
-const toastOk    = new bootstrap.Toast(document.getElementById("toast-ok"));
-
-// Inicialización
+// Inicialización (mover consultas DOM y creación de modal aquí)
 document.addEventListener("DOMContentLoaded", () => {
-  // Poblamos select categorías del modal
-  CATEGORIAS.forEach(c => {
-    const opt = document.createElement("option");
-    opt.value = c; opt.textContent = c;
-    selCat.appendChild(opt);
-  });
+  // Atajos DOM (ahora sí existen los elementos)
+  listaCategorias = document.getElementById("lista-categorias");
+  contEtiquetas   = document.getElementById("contenedor-etiquetas");
+  listaRecomend   = document.getElementById("lista-recomendados");
+  feed            = document.getElementById("feed");
+  msgVacio        = document.getElementById("mensaje-vacio");
+  inputBuscar     = document.getElementById("input-buscar");
+  switchAdmin     = document.getElementById("switch-admin");
 
-  renderCategorias();
-  renderEtiquetas();
-  renderRecomendados();
-  renderFeed();
+  // Modal / Form (sólo crear si el elemento existe)
+  modalEl    = document.getElementById("modalProducto");
+  if (modalEl) {
+    modal = new bootstrap.Modal(modalEl);
+    formProd   = document.getElementById("form-producto");
+    titleModal = document.getElementById("titulo-modal");
+    selCat     = document.getElementById("prod-categoria");
+    fId        = document.getElementById("prod-id");
+    fNombre    = document.getElementById("prod-nombre");
+    fCat       = document.getElementById("prod-categoria");
+    fPrecio    = document.getElementById("prod-precio");
+    fBadge     = document.getElementById("prod-badge");
+    fEtq       = document.getElementById("prod-etiquetas");
+    fImg       = document.getElementById("prod-imagen");
+    fDesc      = document.getElementById("prod-descripcion");
+    toastOk    = new bootstrap.Toast(document.getElementById("toast-ok"));
+  }
 
-  // Búsqueda
-  inputBuscar.addEventListener("input", (e) => {
-    terminoBusqueda = e.target.value.trim().toLowerCase();
-    renderFeed();
-  });
+  // Cargar productos (si tienes una función que devuelve array, úsala aquí)
+  // productos = loadProductos(); // <-- solo si loadProductos devuelve datos, evitar si usa DOM
 
-  // Switch Admin (simulación sin backend)
-  switchAdmin.addEventListener("change", (e) => {
-    ADMIN = e.target.checked;
-    toggleAdminUI(ADMIN);
-  });
+  // Resto de inicialización que depende del DOM
+  if (typeof CATEGORIAS !== "undefined" && selCat) {
+    CATEGORIAS.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c; opt.textContent = c;
+      selCat.appendChild(opt);
+    });
+  }
 
-  // Crear / Editar
-  formProd.addEventListener("submit", onSubmitProducto);
+  // Llamadas seguras: solo ejecutar si los elementos existen
+  if (typeof renderCategorias === "function" && listaCategorias) renderCategorias();
+  if (typeof renderEtiquetas === "function" && contEtiquetas) renderEtiquetas();
+  if (typeof renderRecomendados === "function" && listaRecomend) renderRecomendados();
+  if (typeof renderFeed === "function" && feed) renderFeed();
 
-  // Reset modal al cerrar
-  modalEl.addEventListener("hidden.bs.modal", resetFormProducto);
+  if (inputBuscar) {
+    inputBuscar.addEventListener("input", (e) => {
+      terminoBusqueda = e.target.value.trim().toLowerCase();
+      if (typeof renderFeed === "function") renderFeed();
+    });
+  }
+
+  if (switchAdmin) {
+    switchAdmin.addEventListener("change", (e) => {
+      ADMIN = e.target.checked;
+      toggleAdminUI(ADMIN);
+    });
+  }
+
+  if (formProd) formProd.addEventListener("submit", onSubmitProducto);
+  if (modalEl) modalEl.addEventListener("hidden.bs.modal", resetFormProducto);
 });
 
 // ------ Renderizadores ------
@@ -319,3 +330,26 @@ function escapeHtml(s) {
 function genId() {
   return "prd-" + Math.random().toString(36).slice(2,8);
 }
+
+// Evita 'loadProductos is not defined' con una implementación mínima
+function loadProductos() {
+    const feed = document.getElementById('feed');
+    const mensaje = document.getElementById('mensaje-vacio');
+    if (!feed) return;
+
+    // Ejemplo: insertar una tarjeta de ejemplo
+    feed.innerHTML = `
+      <div class="card card-producto">
+        <img src="https://picsum.photos/600/300?random=1" class="card-img-top" alt="Producto ejemplo">
+        <div class="card-body">
+          <h5 class="card-title">Producto de prueba</h5>
+          <p class="card-text text-muted">Descripción breve del producto.</p>
+        </div>
+      </div>
+    `;
+    // Ocultar mensaje vacío
+    if (mensaje) mensaje.classList.add('d-none');
+}
+
+// Llamada inicial (si antes se llamaba desde aquí)
+document.addEventListener('DOMContentLoaded', loadProductos);
