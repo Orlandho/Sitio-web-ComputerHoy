@@ -1,0 +1,400 @@
+/* Variables de colores */
+:root {
+    --primary-color: #2563eb;
+    --secondary-color: #1e40af;
+    --background-light: #f8fafc;
+    --text-dark: #1e293b;
+    --text-light: #64748b;
+}
+
+/* variable por defecto (se puede sobrescribir desde JS) */
+:root {
+    --navbar-space: 5.5rem; /* valor por defecto, se ajusta en tiempo de ejecución */
+}
+
+
+/* Ajustes generales */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background-light);
+}
+
+/* Contenedor principal */
+main {
+    flex: 1;
+    padding-top: 20px;
+}
+
+/* Ocultar por defecto controles solo para administradores */
+.admin-only {
+  display: none;
+}
+
+/* Tarjetas estilo “post” */
+.card-producto .card-img-top {
+  object-fit: cover;
+  height: 220px;
+}
+
+.card-producto .badge + .badge {
+  margin-left: .25rem;
+}
+
+/* Sidebar sticky (cuando hay altura suficiente) */
+@media (min-width: 992px) {
+  aside .card {
+    position: sticky;
+    top: 84px; /* debajo de navbar */
+  }
+}
+
+/* Utilidades */
+.cursor-pointer { cursor: pointer; }
+
+/* Centrado de publicaciones */
+#feed {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem 0;
+}
+
+/* Asegurar que la sección de bienvenida siempre quede debajo de la navbar */
+.welcome-section {
+    position: relative;
+    margin-top: var(--navbar-space); /* espacio para que no la tape la navbar */
+    padding-top: 1.5rem; /* espacio interior adicional */
+    padding-bottom: 3rem;
+    z-index: 1; /* que quede por encima de otras tarjetas si se superponen */
+}
+
+/* Evitar que tarjetas del feed se monten sobre la bienvenida */
+#feed {
+    margin-top: 1.5rem;
+    z-index: 0;
+}
+
+/* Estilos para el footer */
+footer {
+    position: relative; /* Cambiamos de fixed a relative */
+    width: 100%;
+    background-color: #ffffff;
+    padding: 2rem 0;
+    border-top: 1px solid #e2e8f0;
+    margin-top: auto;
+}
+
+footer p {
+    color: var(--text-light);
+}
+
+/* Estilos para la barra de navegación */
+.navbar {
+    padding: 1rem 0;
+    background: linear-gradient(to right, #1e40af, #2563eb) !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 600;
+}
+
+.navbar .container-fluid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    flex-wrap: nowrap; /* Evita que los elementos se envuelvan */
+}
+
+.navbar .btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}
+
+/* Grupos de botones laterales */
+.navbar .btn-group-left,
+.navbar .btn-group-right {
+    flex: 0 0 auto; /* No crece ni se encoge, mantiene su tamaño */
+    display: flex;
+    gap: 0.5rem;
+    min-width: fit-content; /* Asegura que los botones mantengan su ancho mínimo */
+}
+
+/* Contenedor del buscador */
+.search-container {
+    flex: 1; /* Permite que el buscador ocupe el espacio disponible */
+    min-width: 200px; /* Ancho mínimo antes de colapsar */
+    max-width: 500px; /* Ancho máximo para no estirarse demasiado */
+    margin: 0 1rem; /* Mantiene espacio con los botones */
+}
+
+.search-container input {
+    width: 100%;
+    border-radius: 20px;
+    padding: 0.5rem 1.5rem;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.search-container input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+/* Ajuste para el contenido principal */
+main {
+    margin-top: 2rem;
+    margin-bottom: 0; /* Quitamos el margen inferior */
+}
+
+/* Estilos para la sección de bienvenida */
+.welcome-section {
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+    padding: 6rem 0 3rem 0;  /* Aumentamos el padding superior */
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 40vh;
+}
+
+.welcome-section .container {
+    max-width: 800px;
+    width: 100%;
+    padding: 0 1rem;
+}
+
+.welcome-section h1 {
+    color: var(--text-dark);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-image {
+    max-width: 500px;
+    width: 90%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    margin: 2rem auto;
+}
+
+.modal-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-image {
+    max-width: 250px;
+    width: 90%;
+    height: auto;
+    border-radius: 6px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    margin: 2rem auto;
+}
+
+/* Feed de productos */
+#feed {
+    padding-top: 2rem;
+    margin-bottom: 3rem;
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+    padding: 1.5rem 0;
+    background-color: #ffffff;
+    border-top: 1px solid #e2e8f0;
+}
+
+footer p {
+    color: var(--text-light);
+}
+
+/* Estilos para la barra de navegación */
+.navbar {
+    padding: 1rem 0;
+    background: linear-gradient(to right, #1e40af, #2563eb) !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 600;
+}
+
+.navbar .container-fluid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    flex-wrap: nowrap; /* Evita que los elementos se envuelvan */
+}
+
+.navbar .btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}
+
+/* Grupos de botones laterales */
+.navbar .btn-group-left,
+.navbar .btn-group-right {
+    flex: 0 0 auto; /* No crece ni se encoge, mantiene su tamaño */
+    display: flex;
+    gap: 0.5rem;
+    min-width: fit-content; /* Asegura que los botones mantengan su ancho mínimo */
+}
+
+/* Contenedor del buscador */
+.search-container {
+    flex: 1; /* Permite que el buscador ocupe el espacio disponible */
+    min-width: 200px; /* Ancho mínimo antes de colapsar */
+    max-width: 500px; /* Ancho máximo para no estirarse demasiado */
+    margin: 0 1rem; /* Mantiene espacio con los botones */
+}
+
+.search-container input {
+    width: 100%;
+    border-radius: 20px;
+    padding: 0.5rem 1.5rem;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.search-container input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+/* Ajuste para el contenido principal */
+main {
+    margin-top: 2rem;
+    margin-bottom: 0; /* Quitamos el margen inferior */
+}
+
+/* Estilos para la sección de bienvenida */
+.welcome-section {
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+    padding: 6rem 0 3rem 0;  /* Aumentamos el padding superior */
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 40vh;
+}
+
+.welcome-section .container {
+    max-width: 800px;
+    width: 100%;
+    padding: 0 1rem;
+}
+
+.welcome-section h1 {
+    color: var(--text-dark);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-image {
+    max-width: 500px;
+    width: 90%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    margin: 2rem auto;
+}
+
+/* Estilos para botones */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    transform: translateY(-1px);
+}
+
+/* Efectos hover generales */
+a, button {
+    transition: all 0.2s ease;
+}
+
+/* Ajustes responsive */
+@media (max-width: 992px) {
+    .navbar .container-fluid {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    .search-container {
+        width: 100%;
+        order: 3;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar .container-fluid {
+        flex-wrap: wrap; /* Permite que los elementos se envuelvan en móviles */
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .btn-group-left,
+    .btn-group-right {
+        order: 1; /* Los botones aparecen primero */
+    }
+
+    .search-container {
+        order: 2; /* El buscador aparece después */
+        flex-basis: 100%; /* Ocupa todo el ancho */
+        margin: 0.5rem 0;
+    }
+
+    .welcome-section {
+        padding-top: 8rem;  /* Más espacio en móviles */
+    }
+
+    .welcome-section h1 {
+        font-size: 2rem;
+    }
+
+    .welcome-section .lead {
+        font-size: 1.1rem;
+        padding: 0 1rem;
+    }
+}
+
+/* Ajustes para pantallas con poca altura */
+@media (max-height: 820px) {
+    :root { --navbar-space: 6.5rem; }
+    .welcome-section { min-height: 30vh; }
+}
+
+/* Ajustes para pantallas estrechas */
+@media (max-width: 768px) {
+    :root { --navbar-space: 8rem; }
+    .welcome-section { padding-top: 2.5rem; }
+}

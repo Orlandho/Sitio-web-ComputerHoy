@@ -1,0 +1,54 @@
+{
+  "usuarios": [
+    {
+      "id": "1",
+      "correo": "admin@demo.com",
+      "nombre": "Administrador",
+      "password": "1234"
+    },
+    {
+      "id": "2",
+      "correo": "carlos@demo.com",
+      "nombre": "Carlos",
+      "password": "1234"
+    },
+    {
+      "id": "3",
+      "correo": "orlando@demo.com",
+      "nombre": "Orlando",
+      "password": "1234"
+    }
+  ],
+  "productos": [
+    {
+      "id": "prd-001",
+      "nombre": "Refrigeradora Frost X 350L",
+      "categoria": "Refrigeración",
+      "precio": 1599,
+      "badge": "oferta",
+      "etiquetas": [
+        "ahorro-energia",
+        "smart"
+      ],
+      "imagen": "https://images.unsplash.com/photo-1586201375761-83865001e31b?q=80&w=1200&auto=format&fit=crop",
+      "descripcion": "A++ eficiencia, panel touch, enfriamiento rápido.",
+      "fechaPublicacion": "2025-10-10",
+      "likes": 3
+    },
+    {
+      "id": "prd-002",
+      "nombre": "Refrigeradora Frost X 350L",
+      "categoria": "Refrigeración",
+      "precio": 1599,
+      "badge": "oferta",
+      "etiquetas": [
+        "ahorro-energia",
+        "smart"
+      ],
+      "imagen": "https://images.unsplash.com/photo-1586201375761-83865001e31b?q=80&w=1200&auto=format&fit=crop",
+      "descripcion": "A++ eficiencia, panel touch, enfriamiento rápido.",
+      "fechaPublicacion": "2025-10-10",
+      "likes": 3
+    }
+  ]
+}

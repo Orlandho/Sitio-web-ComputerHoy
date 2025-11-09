@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ComputerHoy · Promos de Electrodomésticos</title>
+  <meta name="description"
+    content="Blog promotor de electrodomésticos con ofertas, novedades y filtrado por categorías y etiquetas.">
+
+  <!-- Bootstrap 5.3.8 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    crossorigin="anonymous">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+  <!-- Header con la barra de navegación -->
+  <header >
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+      <div class="container-fluid">
+        <!-- Botones izquierdos -->
+        <div class="btn-group-left">
+          <button id="btn-inicio" class="btn btn-outline-light">Inicio</button>
+          <button class="btn btn-outline-light">Categoría</button>
+        </div>
+
+        <!-- Buscador centrado -->
+        <div class="search-container">
+          <input class="form-control" type="search" placeholder="Buscar productos..." aria-label="Buscar">
+        </div>
+
+        <!-- Botón derecho -->
+        <div class="btn-group-right align-items-center d-flex gap-2">
+          <button id="btn-login" class="btn btn-primary">Iniciar sesión</button>
+
+          <!-- Contenedor del usuario logueado -->
+          <div id="user-info" class="dropdown d-none">
+            <button class="btn btn-outline-light dropdown-toggle d-flex align-items-center" type="button"
+              id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle fs-4 me-2"></i>
+              <span id="user-name"></span>
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><button id="btn-logout" class="dropdown-item text-danger">Salir</button></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Contenedor principal -->
+  <div class="page-content">
+    <!-- Sección de bienvenida -->
+    <section class="welcome-section">
+      <div class="container text-center">
+        <h1 class="display-4">¡Bienvenido a ComputerHoy!</h1>
+        <img src="assets/images/computerHoy.png" alt="Computadora moderna" class="welcome-image">
+        <p class="lead">
+          Aquí comienza tu conexión con lo mejor del mundo electrónico.<br>
+          Explora, comenta y comparte las últimas promociones en tecnología como si estuvieras en tu red social
+          favorita.
+        </p>
+      </div>
+    </section>
+
+    <!-- CONTENIDO -->
+    <main class="container">
+      <div class="row">
+        <section class="col-12" id="col-feed">
+          <div id="feed" class="d-flex flex-column gap-3">
+            <!-- Tarjetas de productos desde JS -->
+          </div>
+          <div id="mensaje-vacio" class="text-center text-muted py-5 d-none">
+            No se encontraron productos con los filtros actuales.
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="border-top">
+    <div class="container text-center small text-muted">
+      <p class="mb-0">© 2025 ComputerHoy · promoción de electrodomésticos</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5.3.8 JS bundle (con Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    crossorigin="anonymous"></script>
+  <script src="assets/js/app.js"></script>
+
+  <!-- Modal de Login -->
+  <div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="modalLoginLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalLoginLabel">Iniciar sesión</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+
+        <div class="modal-image">
+          <img src="assets/images/computerHoymini.png" alt="Computerhoy" class="login-image">
+        </div>
+
+        <div class="modal-body">
+          <form id="formLogin">
+            <div class="mb-3">
+              <label for="login-email" class="form-label">Correo electrónico</label>
+              <input type="email" id="login-email" class="form-control" placeholder="ejemplo@correo.com" required>
+            </div>
+            <div class="mb-3">
+              <label for="login-pass" class="form-label">Contraseña</label>
+              <input type="password" id="login-pass" class="form-control" placeholder="********" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Iniciar sesión</button>
+          </form>
+
+          <hr class="my-3">
+          <p class="text-center mb-0">
+            ¿No tienes cuenta?
+            <a href="#" id="link-registrarse">Regístrate ahora</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Registro -->
+  <div class="modal fade" id="modalRegistro" tabindex="-1" aria-labelledby="modalRegistroLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalRegistroLabel">Registro</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+
+        <div class="modal-image">
+          <img src="assets/images/computerHoymini.png" alt="Computerhoy" class="login-image">
+        </div>
+
+        <div class="modal-body">
+
+          <form id="formRegistro">
+            <div class="mb-3">
+              <label for="reg-email" class="form-label">Correo electrónico</label>
+              <input type="email" id="reg-email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label for="reg-nombre" class="form-label">Tu Nombre</label>
+              <input type="text" id="reg-nombre" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label for="reg-pass" class="form-label">Contraseña</label>
+              <input type="password" id="reg-pass" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Crear cuenta</button>
+          </form>
+
+          <hr class="my-3">
+          <p class="text-center mb-0">
+            ¿Ya tienes cuenta?
+            <a href="#" id="link-logearse">Inicia Sesión</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
