@@ -12,6 +12,7 @@
     --navbar-space: 5.5rem; /* valor por defecto, se ajusta en tiempo de ejecución */
 }
 
+
 /* Ajustes generales */
 html, body {
     height: 100%;
@@ -37,10 +38,17 @@ main {
   display: none;
 }
 
+.card-producto{
+    display: flex;
+    flex-direction: row;
+}
+
 /* Tarjetas estilo “post” */
 .card-producto .card-img-top {
-  object-fit: cover;
-  height: 220px;
+  object-fit: contain;
+  height: 600px;
+  width: 65%;
+
 }
 
 .card-producto .badge + .badge {
@@ -187,6 +195,21 @@ main {
     width: 90%;
     height: auto;
     border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    margin: 2rem auto;
+}
+
+.modal-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-image {
+    max-width: 250px;
+    width: 90%;
+    height: auto;
+    border-radius: 6px;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
     margin: 2rem auto;
 }

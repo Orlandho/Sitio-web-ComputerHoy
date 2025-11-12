@@ -1,0 +1,76 @@
+{
+  "usuarios": [
+    {
+      "id": "1",
+      "correo": "admin@demo.com",
+      "nombre": "Administrador",
+      "password": "1234"
+    },
+    {
+      "id": "2",
+      "correo": "carlos@demo.com",
+      "nombre": "Carlos",
+      "password": "1234"
+    },
+    {
+      "id": "3",
+      "correo": "orlando@demo.com",
+      "nombre": "Orlando",
+      "password": "1234"
+    },
+    {
+      "id": "6b6f",
+      "correo": "adrian@demo.com",
+      "nombre": "Adrian",
+      "password": "1234"
+    }
+  ],
+  "productos": [
+    {
+      "id": "prd-001",
+      "nombre": "Refrigeradora Frost X 350L",
+      "categoria": "Refrigeración",
+      "precio": 1500,
+      "badge": "oferta",
+      "etiquetas": [
+        "ahorro-energia",
+        "smart"
+      ],
+      "imagen": "https://plazavea.vteximg.com.br/arquivos/ids/9085065-418-418/20251561.jpg",
+      "descripcion": "A++ eficiencia, panel touch, enfriamiento rápido.",
+      "fechaPublicacion": "2025-10-10",
+      "likes": 5
+    },
+    {
+      "id": "prd-002",
+      "nombre": "Lavadora AquaSpin 8kg",
+      "categoria": "Limpieza",
+      "precio": 999.9,
+      "badge": "nuevo",
+      "etiquetas": [
+        "8kg",
+        "delicados"
+      ],
+      "imagen": "https://www.olier.com.py/storage/sku/mueller-lavarropas-lavarropas-mueller-supertank-aquatec-8-kg-1-1-1736450864.png",
+      "descripcion": "Programas rápidos y silenciosos. Ideal departamentos.",
+      "fechaPublicacion": "2025-10-12",
+      "likes": 10
+    },
+    {
+      "id": "prd-003",
+      "nombre": "Smart TV 55'' 4K HDR",
+      "categoria": "Video",
+      "precio": 1799,
+      "badge": "",
+      "etiquetas": [
+        "4k",
+        "hdr",
+        "dolby"
+      ],
+      "imagen": "https://media.flixcar.com/webp/synd-asset/Samsung-172555222-pe-crystal-uhd-du8000-501829-un55du8000gxpe-540784799--Download-Source--zoom.png",
+      "descripcion": "HDR10+, apps preinstaladas, control por voz.",
+      "fechaPublicacion": "2025-10-15",
+      "likes": 9
+    }
+  ]
+}
