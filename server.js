@@ -227,6 +227,62 @@ app.put('/api/productos/:id/vistas', (req, res) => {
   }
 });
 
+// API: estadísticas para el dashboard
+app.get('/api/dashboard/stats', (req, res) => {
+  try {
+    const db = leerDB(); // tu función que lee db.json
+    const productos = Array.isArray(db.productos) ? db.productos : [];
+
+    const totalPublicaciones = productos.length;
+    const totalCosto = productos.reduce((s,p) => s + (Number(p.precio) || 0), 0);
+    const totalVistas = productos.reduce((s,p) => s + (Number(p.vistas) || 0), 0);
+    const totalLikes = productos.reduce((s,p) => s + (Number(p.likes) || 0), 0);
+    const totalComentarios = productos.reduce((s,p) => s + ((p.comentarios||[]).length || 0), 0);
+
+    const promedioVistas = totalPublicaciones ? totalVistas / totalPublicaciones : 0;
+    const promedioLikes = totalPublicaciones ? totalLikes / totalPublicaciones : 0;
+    const promedioComentarios = totalPublicaciones ? totalComentarios / totalPublicaciones : 0;
+
+    const mapped = productos.map(p => ({
+      id: p.id,
+      nombre: p.nombre,
+      categoria: p.categoria,
+      precio: Number(p.precio) || 0,
+      vistas: Number(p.vistas) || 0,
+      likes: Number(p.likes) || 0,
+      comentarios: (p.comentarios||[]).length || 0,
+      imagen: p.imagen || '',
+      badge: p.badge || ''
+    }));
+
+    const topByInteraction = [...mapped].sort((a,b) => (b.vistas+b.likes+b.comentarios) - (a.vistas+a.likes+a.comentarios)).slice(0,10);
+    const topByComments = [...mapped].sort((a,b) => b.comentarios - a.comentarios).slice(0,10);
+    const topByLikes = [...mapped].sort((a,b) => b.likes - a.likes).slice(0,10);
+    const topByViews = [...mapped].sort((a,b) => b.vistas - a.vistas).slice(0,10);
+
+    res.json({
+      success: true,
+      stats: {
+        totalPublicaciones,
+        totalCosto,
+        totalVistas,
+        totalLikes,
+        totalComentarios,
+        promedioVistas,
+        promedioLikes,
+        promedioComentarios
+      },
+      topByInteraction,
+      topByComments,
+      topByLikes,
+      topByViews
+    });
+  } catch (err) {
+    console.error('Error /api/dashboard/stats', err);
+    res.status(500).json({ success:false, error:'Error interno' });
+  }
+});
+
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
