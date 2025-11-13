@@ -2,6 +2,7 @@
 let ADMIN = false;
 let productos = [];
 let activeCategory = ''; // <--- categoría activa (vacía = mostrar todas)
+let searchTerm = ''; // <--- término de búsqueda
 
 // Función para cargar productos desde el servidor
 async function cargarProductos() {
@@ -28,11 +29,31 @@ function renderizarProductos() {
     const msgVacio = document.getElementById('mensaje-vacio');
     if (!feed) return;
 
-    // Filtrar por categoría activa si existe
+    // Filtrar por categoría activa Y término de búsqueda
     const items = productos.filter(p => {
-        if (!activeCategory) return true;
-        // normalizar mayúsculas/minúsculas
-        return String(p.categoria || '').toLowerCase() === String(activeCategory).toLowerCase();
+        // Filtro por categoría
+        if (activeCategory && String(p.categoria || '').toLowerCase() !== String(activeCategory).toLowerCase()) {
+            return false;
+        }
+
+        // Filtro por búsqueda (si searchTerm existe)
+        if (searchTerm) {
+            const term = searchTerm.toLowerCase();
+            const nombre = String(p.nombre || '').toLowerCase();
+            const descripcion = String(p.descripcion || '').toLowerCase();
+            const categoria = String(p.categoria || '').toLowerCase();
+            const etiquetas = (p.etiquetas || []).map(e => String(e).toLowerCase()).join(' ');
+
+            // Buscar coincidencias en nombre, descripción, categoría o etiquetas
+            const coincide = nombre.includes(term) || 
+                           descripcion.includes(term) || 
+                           categoria.includes(term) || 
+                           etiquetas.includes(term);
+
+            if (!coincide) return false;
+        }
+
+        return true;
     });
 
     if (items.length === 0) {
@@ -130,9 +151,14 @@ function actualizarCategorias() {
 // Nueva función para aplicar filtro desde UI
 function filtrarPorCategoria(categoryLabel) {
     activeCategory = categoryLabel || '';
-    // actualizar texto del botón
     const btn = document.getElementById('btnCategoria');
     if (btn) btn.textContent = activeCategory ? categoryLabel : 'Categoría';
+    renderizarProductos();
+}
+
+// Nueva función para buscar por palabra clave
+function buscarProductos(termino) {
+    searchTerm = termino.trim().toLowerCase();
     renderizarProductos();
 }
 
@@ -184,7 +210,13 @@ function adjustLayout() {
 document.addEventListener('DOMContentLoaded', () => {
     cargarProductos();
     adjustLayout();
-
-    // Vincular listeners de resize
     window.addEventListener('resize', adjustLayout);
+
+    // Vincular evento de búsqueda
+    const inputBuscar = document.getElementById('inputBuscar');
+    if (inputBuscar) {
+        inputBuscar.addEventListener('input', (e) => {
+            buscarProductos(e.target.value);
+        });
+    }
 });
