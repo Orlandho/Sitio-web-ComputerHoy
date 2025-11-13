@@ -19,8 +19,6 @@
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
-<!-- Hola Melody -->
-
 <body>
   <!-- Header con la barra de navegación -->
   <header>
@@ -68,22 +66,6 @@
           </button>
         </div>
 
-        <!-- Botón derecho -->
-        <div class="btn-group-right align-items-center d-flex gap-2">
-          <button id="btn-login" class="btn btn-primary">Iniciar sesión</button>
-
-          <!-- Contenedor del usuario logueado -->
-          <div id="user-info" class="dropdown d-none">
-            <button class="btn btn-outline-light dropdown-toggle d-flex align-items-center" type="button"
-              id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-person-circle fs-4 me-2"></i>
-              <span id="user-name"></span>
-            </button>
-
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-              <li><button id="btn-logout" class="dropdown-item text-danger">Salir</button></li>
-            </ul>
-          </div>
         </div>
       </div>
     </nav>
@@ -131,87 +113,8 @@
     crossorigin="anonymous"></script>
   <script src="assets/js/app.js"></script>
 
-  <!-- Modal de Login -->
-  <div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="modalLoginLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalLoginLabel">Iniciar sesión</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-        </div>
-
-        <div class="modal-image">
-          <img src="assets/images/computerHoymini.png" alt="Computerhoy" class="login-image">
-        </div>
-
-        <div class="modal-body">
-          <form id="formLogin">
-            <div class="mb-3">
-              <label for="login-email" class="form-label">Correo electrónico</label>
-              <input type="email" id="login-email" class="form-control" placeholder="ejemplo@correo.com" required>
-            </div>
-            <div class="mb-3">
-              <label for="login-pass" class="form-label">Contraseña</label>
-              <input type="password" id="login-pass" class="form-control" placeholder="********" required>
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Iniciar sesión</button>
-          </form>
-
-          <hr class="my-3">
-          <p class="text-center mb-0">
-            ¿No tienes cuenta?
-            <a href="#" id="link-registrarse">Regístrate ahora</a>
-          </p>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal de Registro -->
-  <div class="modal fade" id="modalRegistro" tabindex="-1" aria-labelledby="modalRegistroLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalRegistroLabel">Registro</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-        </div>
-
-        <div class="modal-image">
-          <img src="assets/images/computerHoymini.png" alt="Computerhoy" class="login-image">
-        </div>
-
-        <div class="modal-body">
-
-          <form id="formRegistro">
-            <div class="mb-3">
-              <label for="reg-email" class="form-label">Correo electrónico</label>
-              <input type="email" id="reg-email" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label for="reg-nombre" class="form-label">Tu Nombre</label>
-              <input type="text" id="reg-nombre" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label for="reg-pass" class="form-label">Contraseña</label>
-              <input type="password" id="reg-pass" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-success w-100">Crear cuenta</button>
-          </form>
-
-          <hr class="my-3">
-          <p class="text-center mb-0">
-            ¿Ya tienes cuenta?
-            <a href="#" id="link-logearse">Inicia Sesión</a>
-          </p>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
+  
+  
   <!-- Modal Editar Producto -->
 <div class="modal fade" id="modalEditarProducto" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
   <div class="modal-dialog">
