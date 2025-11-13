@@ -1,10 +1,7 @@
-// Estado en memoria
-let ADMIN = false;
 let productos = [];
-let activeCategory = ''; // <--- categoría activa (vacía = mostrar todas)
-let searchTerm = ''; // <--- término de búsqueda
+let activeCategory = '';
+let searchTerm = '';
 
-// Función para cargar productos desde el servidor
 async function cargarProductos() {
     try {
         const response = await fetch('http://localhost:3000/api/productos');
@@ -14,8 +11,7 @@ async function cargarProductos() {
         productos = data.productos || [];
         productos.sort((a, b) => new Date(b.fechaPublicacion) - new Date(a.fechaPublicacion));
         
-        // actualizar UI
-        actualizarCategorias(); // <-- actualizar menú de categorías
+        actualizarCategorias();
         renderizarProductos();
     } catch (error) {
         console.error('Error cargando productos:', error);
@@ -23,20 +19,16 @@ async function cargarProductos() {
     }
 }
 
-// Función para renderizar los productos
 function renderizarProductos() {
     const feed = document.getElementById('feed');
     const msgVacio = document.getElementById('mensaje-vacio');
     if (!feed) return;
 
-    // Filtrar por categoría activa Y término de búsqueda
     const items = productos.filter(p => {
-        // Filtro por categoría
         if (activeCategory && String(p.categoria || '').toLowerCase() !== String(activeCategory).toLowerCase()) {
             return false;
         }
 
-        // Filtro por búsqueda (si searchTerm existe)
         if (searchTerm) {
             const term = searchTerm.toLowerCase();
             const nombre = String(p.nombre || '').toLowerCase();
@@ -96,24 +88,19 @@ function renderizarProductos() {
     `).join('');
 }
 
-// Nueva función: construir menú de categorías dinámicamente
 function actualizarCategorias() {
     const menu = document.getElementById('categoriaMenu');
     const btn = document.getElementById('btnCategoria');
     if (!menu) return;
 
-    // Obtener categorías únicas normales
     const setCats = new Set();
     productos.forEach(p => {
         if (p && p.categoria) setCats.add(String(p.categoria).trim());
     });
 
     const categorias = Array.from(setCats).sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
-
-    // Limpiar menú
     menu.innerHTML = '';
 
-    // Helper para crear item
     function crearItem(label, value) {
         const li = document.createElement('li');
         const btnItem = document.createElement('button');
@@ -121,9 +108,8 @@ function actualizarCategorias() {
         btnItem.className = 'dropdown-item';
         btnItem.setAttribute('data-category', value);
         btnItem.textContent = label;
-        btnItem.addEventListener('click', (e) => {
+        btnItem.addEventListener('click', () => {
             filtrarPorCategoria(value);
-            // marcar activo
             menu.querySelectorAll('.dropdown-item').forEach(it => it.classList.remove('active'));
             btnItem.classList.add('active');
         });
@@ -131,24 +117,18 @@ function actualizarCategorias() {
         return li;
     }
 
-    // Item "Todas"
     menu.appendChild(crearItem('Todas', ''));
-
-    // Items por categoría
     categorias.forEach(cat => menu.appendChild(crearItem(cat, cat)));
 
-    // Marcar activo según activeCategory
     const activeSelector = menu.querySelector(`[data-category="${activeCategory ?? ''}"]`);
     if (activeSelector) {
         menu.querySelectorAll('.dropdown-item').forEach(it => it.classList.remove('active'));
         activeSelector.classList.add('active');
     } else {
-        // si no hay selección, mostrar "Categoría" en el botón
         if (btn) btn.textContent = activeCategory ? activeCategory : 'Categoría';
     }
 }
 
-// Nueva función para aplicar filtro desde UI
 function filtrarPorCategoria(categoryLabel) {
     activeCategory = categoryLabel || '';
     const btn = document.getElementById('btnCategoria');
@@ -156,13 +136,11 @@ function filtrarPorCategoria(categoryLabel) {
     renderizarProductos();
 }
 
-// Nueva función para buscar por palabra clave
 function buscarProductos(termino) {
     searchTerm = termino.trim().toLowerCase();
     renderizarProductos();
 }
 
-// Función para dar like
 async function darLike(productoId, event) {
     if (event) event.stopPropagation();
     try {
@@ -182,11 +160,9 @@ async function darLike(productoId, event) {
     }
 }
 
-// Función para ver detalles y registrar vista
 async function verDetalles(productoId, event) {
     if (event) event.stopPropagation();
 
-    // Registrar vista en el servidor
     try {
         const response = await fetch(`/api/productos/${encodeURIComponent(productoId)}/vistas`, {
             method: 'PUT'
@@ -194,7 +170,6 @@ async function verDetalles(productoId, event) {
 
         if (response.ok) {
             const data = await response.json();
-            // Actualizar el producto local con las nuevas vistas
             const producto = productos.find(p => p.id === productoId);
             if (producto) {
                 producto.vistas = data.vistas;
@@ -205,7 +180,6 @@ async function verDetalles(productoId, event) {
         console.error('Error registrando vista:', error);
     }
 
-    // Guardar en sesión y navegar
     sessionStorage.setItem('productoActual', productoId);
     window.location.href = 'detalles.html';
 }
@@ -218,29 +192,9 @@ function mostrarMensajeVacio() {
     if (msgVacio) msgVacio.classList.remove('d-none');
 }
 
-// Función para ajustar layout
-function adjustLayout() {
-    const feed = document.getElementById('feed');
-    const windowWidth = window.innerWidth;
-
-    if (feed) {
-        if (windowWidth < 576) {
-            feed.style.gridTemplateColumns = '1fr';
-        } else if (windowWidth < 768) {
-            feed.style.gridTemplateColumns = 'repeat(2, 1fr)';
-        } else {
-            feed.style.gridTemplateColumns = 'repeat(3, 1fr)';
-        }
-    }
-}
-
-// Inicialización
 document.addEventListener('DOMContentLoaded', () => {
     cargarProductos();
-    adjustLayout();
-    window.addEventListener('resize', adjustLayout);
 
-    // Vincular evento de búsqueda
     const inputBuscar = document.getElementById('inputBuscar');
     if (inputBuscar) {
         inputBuscar.addEventListener('input', (e) => {

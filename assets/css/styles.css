@@ -1,19 +1,12 @@
-/* Variables de colores */
 :root {
     --primary-color: #2563eb;
     --secondary-color: #1e40af;
     --background-light: #f8fafc;
     --text-dark: #1e293b;
     --text-light: #64748b;
+    --navbar-space: 5.5rem;
 }
 
-/* variable por defecto (se puede sobrescribir desde JS) */
-:root {
-    --navbar-space: 5.5rem; /* valor por defecto, se ajusta en tiempo de ejecución */
-}
-
-
-/* Ajustes generales */
 html, body {
     height: 100%;
     margin: 0;
@@ -27,15 +20,9 @@ body {
     background-color: var(--background-light);
 }
 
-/* Contenedor principal */
 main {
     flex: 1;
     padding-top: 20px;
-}
-
-/* Ocultar por defecto controles solo para administradores */
-.admin-only {
-  display: none;
 }
 
 .card-producto{
@@ -43,7 +30,6 @@ main {
     flex-direction: row;
 }
 
-/* Tarjetas estilo “post” */
 .card-producto .card-img-top {
   object-fit: contain;
   height: 600px;
@@ -55,18 +41,8 @@ main {
   margin-left: .25rem;
 }
 
-/* Sidebar sticky (cuando hay altura suficiente) */
-@media (min-width: 992px) {
-  aside .card {
-    position: sticky;
-    top: 84px; /* debajo de navbar */
-  }
-}
-
-/* Utilidades */
 .cursor-pointer { cursor: pointer; }
 
-/* Centrado de publicaciones */
 #feed {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -74,24 +50,21 @@ main {
     padding: 2rem 0;
 }
 
-/* Asegurar que la sección de bienvenida siempre quede debajo de la navbar */
 .welcome-section {
     position: relative;
-    margin-top: var(--navbar-space); /* espacio para que no la tape la navbar */
-    padding-top: 1.5rem; /* espacio interior adicional */
+    margin-top: var(--navbar-space);
+    padding-top: 1.5rem;
     padding-bottom: 3rem;
-    z-index: 1; /* que quede por encima de otras tarjetas si se superponen */
+    z-index: 1;
 }
 
-/* Evitar que tarjetas del feed se monten sobre la bienvenida */
 #feed {
     margin-top: 1.5rem;
     z-index: 0;
 }
 
-/* Estilos para el footer */
 footer {
-    position: relative; /* Cambiamos de fixed a relative */
+    position: relative;
     width: 100%;
     background-color: #ffffff;
     padding: 2rem 0;
@@ -103,7 +76,6 @@ footer p {
     color: var(--text-light);
 }
 
-/* Estilos para la barra de navegación */
 .navbar {
     padding: 1rem 0;
     background: linear-gradient(to right, #1e40af, #2563eb) !important;
@@ -125,32 +97,28 @@ footer p {
     transition: all 0.2s ease;
 }
 
-/* Grupos de botones laterales */
 .navbar .btn-group-left,
 .navbar .btn-group-right {
-    flex: 0 0 auto; /* No crece ni se encoge, mantiene su tamaño */
+    flex: 0 0 auto;
     display: flex;
     gap: 0.5rem;
-    min-width: fit-content; /* Asegura que los botones mantengan su ancho mínimo */
+    min-width: fit-content;
 }
 
-/* Contenedor del buscador */
 .search-container {
     flex: 1;
     max-width: 500px;
     margin: 0 auto;
 }
 
-/* Ajuste para el contenido principal */
 main {
     margin-top: 2rem;
-    margin-bottom: 0; /* Quitamos el margen inferior */
+    margin-bottom: 0;
 }
 
-/* Estilos para la sección de bienvenida */
 .welcome-section {
     background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
-    padding: 6rem 0 3rem 0;  /* Aumentamos el padding superior */
+    padding: 6rem 0 3rem 0;
     margin-bottom: 2rem;
     border-bottom: 1px solid #e2e8f0;
     display: flex;
@@ -188,15 +156,6 @@ main {
     align-items: center;
 }
 
-/* Feed de productos */
-#feed {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    padding: 2rem 0;
-}
-
-/* Tarjetas de productos */
 .card-producto {
     border: none;
     border-radius: 12px;
@@ -215,7 +174,6 @@ main {
     object-fit: cover;
 }
 
-/* Responsive */
 @media (max-width: 1200px) {
     #feed {
         grid-template-columns: repeat(2, 1fr);
@@ -228,7 +186,6 @@ main {
     }
 }
 
-/* Ajustes responsive */
 @media (max-width: 992px) {
     .navbar .container-fluid {
         flex-direction: column;
@@ -244,24 +201,24 @@ main {
 
 @media (max-width: 768px) {
     .navbar .container-fluid {
-        flex-wrap: wrap; /* Permite que los elementos se envuelvan en móviles */
+        flex-wrap: wrap;
         justify-content: center;
         gap: 1rem;
     }
 
     .btn-group-left,
     .btn-group-right {
-        order: 1; /* Los botones aparecen primero */
+        order: 1;
     }
 
     .search-container {
-        order: 2; /* El buscador aparece después */
-        flex-basis: 100%; /* Ocupa todo el ancho */
+        order: 2;
+        flex-basis: 100%;
         margin: 0.5rem 0;
     }
 
     .welcome-section {
-        padding-top: 8rem;  /* Más espacio en móviles */
+        padding-top: 8rem;
     }
 
     .welcome-section h1 {
@@ -272,16 +229,12 @@ main {
         font-size: 1.1rem;
         padding: 0 1rem;
     }
+
+    :root { --navbar-space: 8rem; }
+    .welcome-section { padding-top: 2.5rem; }
 }
 
-/* Ajustes para pantallas con poca altura */
 @media (max-height: 820px) {
     :root { --navbar-space: 6.5rem; }
     .welcome-section { min-height: 30vh; }
-}
-
-/* Ajustes para pantallas estrechas */
-@media (max-width: 768px) {
-    :root { --navbar-space: 8rem; }
-    .welcome-section { padding-top: 2.5rem; }
 }

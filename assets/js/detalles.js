@@ -1,7 +1,6 @@
 let productoActual = null;
 let modalEditarDetalles = null;
 
-// Cargar detalles del producto
 async function cargarDetalles() {
     const productoId = sessionStorage.getItem('productoActual');
     if (!productoId) {
@@ -10,7 +9,6 @@ async function cargarDetalles() {
     }
 
     try {
-        // usar ruta root-relative
         const response = await fetch('/api/productos');
         if (!response.ok) throw new Error('Error cargando productos: ' + response.status);
         const data = await response.json();
@@ -106,13 +104,7 @@ document.getElementById('edit-imagen-file-detalles').addEventListener('change', 
     const file = e.target.files[0];
     const previewDiv = document.getElementById('previewImagenEditarDetalles');
     
-    if (file) {
-        if (file.size > 5 * 1024 * 1024) {
-            alert('El archivo es muy grande. Máximo 5MB');
-            this.value = '';
-            return;
-        }
-
+    if (file && file.size <= 5 * 1024 * 1024) {
         const reader = new FileReader();
         reader.onload = function(event) {
             previewDiv.innerHTML = `
@@ -120,6 +112,9 @@ document.getElementById('edit-imagen-file-detalles').addEventListener('change', 
             `;
         };
         reader.readAsDataURL(file);
+    } else if (file) {
+        alert('El archivo es muy grande. Máximo 5MB');
+        this.value = '';
     }
 });
 
@@ -146,12 +141,10 @@ async function guardarProductoEditadoDetalles() {
             .split(',')
             .map(e => e.trim())
             .filter(e => e),
-        // sólo incluir imagen si existe nueva; undefined no sobrescribe in servidor si manejo correcto
         imagen: imagenData || undefined
     };
 
     try {
-        // usar ruta root-relative; comprobar response.ok y manejar errores
         const response = await fetch(`/api/productos/${encodeURIComponent(id)}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -164,7 +157,6 @@ async function guardarProductoEditadoDetalles() {
         }
 
         const data = await response.json();
-        // actualizar productoActual con la respuesta del servidor si viene el producto actualizado
         productoActual = { ...productoActual, ...(data.producto || {}) };
 
         mostrarDetalles();
@@ -192,7 +184,6 @@ async function cargarComentarios() {
             return;
         }
 
-        // Mostrar botón eliminar junto al comentario
         div.innerHTML = comentarios.map(com => `
             <div class="card mb-3">
                 <div class="card-body d-flex justify-content-between align-items-start">
@@ -215,7 +206,6 @@ async function cargarComentarios() {
     }
 }
 
-// Función para eliminar comentario
 async function eliminarComentario(comentarioId) {
     if (!confirm('¿Eliminar este comentario?')) return;
 
@@ -229,7 +219,6 @@ async function eliminarComentario(comentarioId) {
             throw new Error(`Servidor respondió ${response.status}: ${text}`);
         }
 
-        // Recargar comentarios en la vista
         cargarComentarios();
     } catch (error) {
         console.error('Error al eliminar comentario:', error);
@@ -251,7 +240,6 @@ async function darLike(productoId) {
     }
 }
 
-// Manejar formulario de comentarios
 document.getElementById('formComentario').addEventListener('submit', async (e) => {
     e.preventDefault();
     const autor = document.getElementById('inputAutor').value;
@@ -280,7 +268,6 @@ document.getElementById('formComentario').addEventListener('submit', async (e) =
     }
 });
 
-// Nueva función para eliminar producto desde la vista detalle
 async function eliminarProductoDetalles() {
     if (!confirm('¿Eliminar este producto? Esta acción no se puede deshacer.')) return;
 
@@ -294,7 +281,6 @@ async function eliminarProductoDetalles() {
             throw new Error(`Servidor respondió ${response.status}: ${text}`);
         }
 
-        // Redirigir al listado principal
         alert('Producto eliminado correctamente');
         window.location.href = 'index.html';
     } catch (error) {
@@ -303,5 +289,4 @@ async function eliminarProductoDetalles() {
     }
 }
 
-// Inicializar
 document.addEventListener('DOMContentLoaded', cargarDetalles);

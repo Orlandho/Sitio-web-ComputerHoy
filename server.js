@@ -7,7 +7,6 @@ const bodyParser = require('body-parser');
 const app = express();
 const PORT = 3000;
 
-// Middleware
 app.use(cors());
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb' }));
@@ -15,7 +14,6 @@ app.use(express.static(__dirname));
 
 const dbPath = path.join(__dirname, 'db.json');
 
-// Función para leer db.json
 function leerDB() {
     try {
         const data = fs.readFileSync(dbPath, 'utf8');
@@ -26,7 +24,6 @@ function leerDB() {
     }
 }
 
-// Función para escribir en db.json
 function escribirDB(data) {
     try {
         fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
@@ -37,17 +34,14 @@ function escribirDB(data) {
     }
 }
 
-// GET - Obtener todos los productos
 app.get('/api/productos', (req, res) => {
     const db = leerDB();
     res.json(db);
 });
 
-// POST - Crear nuevo producto
 app.post('/api/productos', (req, res) => {
     const { nombre, categoria, precio, badge, etiquetas, imagen, descripcion } = req.body;
 
-    // Validación
     if (!nombre || !categoria || !precio || !imagen || !descripcion) {
         return res.status(400).json({ error: 'Faltan campos requeridos' });
     }
@@ -61,16 +55,14 @@ app.post('/api/productos', (req, res) => {
         precio: parseFloat(precio),
         badge: badge || '',
         etiquetas: etiquetas || [],
-        imagen, // Base64 o URL
+        imagen,
         descripcion,
         fechaPublicacion: new Date().toISOString().split('T')[0],
         likes: 0
     };
 
-    // Agregar al inicio del array (más nuevos primero)
     db.productos.unshift(nuevoProducto);
 
-    // Guardar en db.json
     if (escribirDB(db)) {
         res.status(201).json({ 
             success: true, 
@@ -82,7 +74,6 @@ app.post('/api/productos', (req, res) => {
     }
 });
 
-// DELETE - Eliminar producto
 app.delete('/api/productos/:id', (req, res) => {
   const { id } = req.params;
   const db = leerDB();
@@ -101,7 +92,6 @@ app.delete('/api/productos/:id', (req, res) => {
   }
 });
 
-// PUT - Actualizar likes
 app.put('/api/productos/:id/like', (req, res) => {
     const { id } = req.params;
     const db = leerDB();
@@ -120,7 +110,6 @@ app.put('/api/productos/:id/like', (req, res) => {
     }
 });
 
-// POST - Agregar comentario a un producto
 app.post('/api/productos/:id/comentarios', (req, res) => {
     const { id } = req.params;
     const { autor, texto } = req.body;
@@ -156,7 +145,6 @@ app.post('/api/productos/:id/comentarios', (req, res) => {
     }
 });
 
-// PUT - Actualizar producto
 app.put('/api/productos/:id', (req, res) => {
   const { id } = req.params;
   const { nombre, categoria, precio, badge, etiquetas, imagen, descripcion } = req.body;
@@ -179,7 +167,6 @@ app.put('/api/productos/:id', (req, res) => {
   }
 });
 
-// DELETE - Eliminar comentario de un producto
 app.delete('/api/productos/:id/comentarios/:comentarioId', (req, res) => {
   const { id, comentarioId } = req.params;
   const db = leerDB();
@@ -207,7 +194,6 @@ app.delete('/api/productos/:id/comentarios/:comentarioId', (req, res) => {
   }
 });
 
-// PUT - Incrementar vistas de un producto
 app.put('/api/productos/:id/vistas', (req, res) => {
   const { id } = req.params;
   const db = leerDB();
@@ -217,7 +203,6 @@ app.put('/api/productos/:id/vistas', (req, res) => {
     return res.status(404).json({ error: 'Producto no encontrado' });
   }
 
-  // Incrementar vistas (inicializar en 0 si no existe)
   producto.vistas = (producto.vistas || 0) + 1;
 
   if (escribirDB(db)) {
@@ -227,10 +212,9 @@ app.put('/api/productos/:id/vistas', (req, res) => {
   }
 });
 
-// API: estadísticas para el dashboard
 app.get('/api/dashboard/stats', (req, res) => {
   try {
-    const db = leerDB(); // tu función que lee db.json
+    const db = leerDB();
     const productos = Array.isArray(db.productos) ? db.productos : [];
 
     const totalPublicaciones = productos.length;
@@ -260,7 +244,6 @@ app.get('/api/dashboard/stats', (req, res) => {
     const topByLikes = [...mapped].sort((a,b) => b.likes - a.likes).slice(0,10);
     const topByViews = [...mapped].sort((a,b) => b.vistas - a.vistas).slice(0,10);
 
-    // Última publicación (más reciente por fecha)
     const sortedByDate = [...productos].sort((a,b) => {
       const dA = new Date(a.fechaPublicacion || 0);
       const dB = new Date(b.fechaPublicacion || 0);
