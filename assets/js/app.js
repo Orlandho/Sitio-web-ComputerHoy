@@ -684,11 +684,19 @@ async function eliminarProducto(id) {
 // Función para cargar productos desde db.json
 async function cargarProductos() {
     try {
-        const response = await fetch('db.json');
-        if (!response.ok) throw new Error('Error al cargar db.json');
+        // Primero intenta cargar desde localStorage (productos nuevos)
+        const productosLocal = localStorage.getItem('productosComputerHoy');
         
-        const data = await response.json();
-        productos = data.productos || [];
+        if (productosLocal) {
+            productos = JSON.parse(productosLocal);
+        } else {
+            // Si no hay en localStorage, carga desde db.json
+            const response = await fetch('db.json');
+            if (!response.ok) throw new Error('Error al cargar db.json');
+            
+            const data = await response.json();
+            productos = data.productos || [];
+        }
         
         // Ordenar productos por fecha (más nuevos primero)
         productos.sort((a, b) => new Date(b.fechaPublicacion) - new Date(a.fechaPublicacion));
@@ -700,7 +708,7 @@ async function cargarProductos() {
     }
 }
 
-// Función para renderizar los productos en el feed
+// Función para renderizar los productos
 function renderizarProductos() {
     const feed = document.getElementById('feed');
     const msgVacio = document.getElementById('mensaje-vacio');
@@ -747,7 +755,6 @@ function renderizarProductos() {
     `).join('');
 }
 
-// Función para mostrar mensaje vacío
 function mostrarMensajeVacio() {
     const feed = document.getElementById('feed');
     const msgVacio = document.getElementById('mensaje-vacio');
@@ -756,7 +763,7 @@ function mostrarMensajeVacio() {
     if (msgVacio) msgVacio.classList.remove('d-none');
 }
 
-// Ajustar layout según tamaño de pantalla
+// Función para ajustar layout
 function adjustLayout() {
     const feed = document.getElementById('feed');
     const windowWidth = window.innerWidth;
@@ -776,12 +783,7 @@ function adjustLayout() {
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', () => {
-    // Cargar productos
     cargarProductos();
-    
-    // Ajustar layout inicial
     adjustLayout();
-    
-    // Configurar evento resize
     window.addEventListener('resize', adjustLayout);
 });
