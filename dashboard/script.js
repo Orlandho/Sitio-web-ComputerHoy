@@ -45,7 +45,8 @@ async function fetchStatsAPI() {
             promedioLikes: json.stats.promedioLikes,
             promedioComentarios: json.stats.promedioComentarios,
             topByInteraction: json.topByInteraction,
-            topByViews: json.topByViews
+            topByViews: json.topByViews,
+            ultimaPublicacion: json.ultimaPublicacion || null
         };
     } catch (e) {
         console.warn('Fallo /api/dashboard/stats:', e.message);
@@ -77,10 +78,21 @@ async function fetchProductosFallback() {
             likes: Number(p.likes)||0,
             comentarios: (p.comentarios||[]).length,
             imagen: p.imagen||'',
-            badge: p.badge||''
+            badge: p.badge||'',
+            fechaPublicacion: p.fechaPublicacion||null
         }));
         const topByInteraction = [...mapped].sort((a,b)=>(b.vistas+b.likes+b.comentarios)-(a.vistas+a.likes+a.comentarios)).slice(0,10);
         const topByViews = [...mapped].sort((a,b)=> b.vistas - a.vistas).slice(0,10);
+        // Última publicación (más reciente por fecha)
+        const sortedByDate = [...productos].sort((a,b)=>{
+            const dA = new Date(a.fechaPublicacion||0);
+            const dB = new Date(b.fechaPublicacion||0);
+            return dB - dA;
+        });
+        const ultimaPublicacion = sortedByDate[0] ? {
+            nombre: sortedByDate[0].nombre||'',
+            fechaPublicacion: sortedByDate[0].fechaPublicacion||null
+        } : null;
         return {
             totalPublicaciones,
             totalCosto,
@@ -91,7 +103,8 @@ async function fetchProductosFallback() {
             promedioLikes,
             promedioComentarios,
             topByInteraction,
-            topByViews
+            topByViews,
+            ultimaPublicacion
         };
     } catch (e) {
         console.error('Fallo fallback /api/productos:', e.message);
@@ -100,8 +113,15 @@ async function fetchProductosFallback() {
 }
 
 function renderStats(d) {
-    setText('costoTotal', (d.totalCosto||0).toFixed(2));
-    setText('costoInfo', `${d.totalPublicaciones||0} productos`);
+    // Última publicación
+    if(d.ultimaPublicacion){
+        setText('ultimaPublicacion', d.ultimaPublicacion.nombre||'-');
+        const fecha = d.ultimaPublicacion.fechaPublicacion ? new Date(d.ultimaPublicacion.fechaPublicacion).toLocaleDateString('es-ES') : '-';
+        setText('fechaUltimaPublicacion', fecha);
+    } else {
+        setText('ultimaPublicacion', 'Sin publicaciones');
+        setText('fechaUltimaPublicacion', '-');
+    }
     setText('totalPublicaciones', d.totalPublicaciones||0);
     setText('totalVistas', d.totalVistas||0);
     setText('totalLikes', d.totalLikes||0);

@@ -260,6 +260,17 @@ app.get('/api/dashboard/stats', (req, res) => {
     const topByLikes = [...mapped].sort((a,b) => b.likes - a.likes).slice(0,10);
     const topByViews = [...mapped].sort((a,b) => b.vistas - a.vistas).slice(0,10);
 
+    // Última publicación (más reciente por fecha)
+    const sortedByDate = [...productos].sort((a,b) => {
+      const dA = new Date(a.fechaPublicacion || 0);
+      const dB = new Date(b.fechaPublicacion || 0);
+      return dB - dA;
+    });
+    const ultimaPublicacion = sortedByDate[0] ? {
+      nombre: sortedByDate[0].nombre || '',
+      fechaPublicacion: sortedByDate[0].fechaPublicacion || null
+    } : null;
+
     res.json({
       success: true,
       stats: {
@@ -275,7 +286,8 @@ app.get('/api/dashboard/stats', (req, res) => {
       topByInteraction,
       topByComments,
       topByLikes,
-      topByViews
+      topByViews,
+      ultimaPublicacion
     });
   } catch (err) {
     console.error('Error /api/dashboard/stats', err);
