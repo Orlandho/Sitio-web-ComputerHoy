@@ -1,0 +1,891 @@
+/* Variables CSS para colores (sin cambios) */
+:root {
+    --primary-purple: #8B5CF6;
+    --light-purple: #A78BFA;
+    --dark-purple: #6D28D9;
+    --text-color: #333;
+    --light-text-color: #666;
+    --bg-color-light: #F8F8F8;
+    --card-bg: #FFFFFF;
+    --border-color: #E5E7EB;
+    --positive-green: #10B981;
+    --negative-red: #EF4444;
+    --neutral-blue: #3B82F6;
+    --facebook-blue: #4267B2;
+    --twitter-blue: #1DA1F2;
+    --linkedin-blue: #0A66C2;
+    --youtube-red: #FF0000;
+    --instagram-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+/* Estilos Generales del Body y Contenedor Principal (sin cambios) */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: var(--bg-color-light);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.dashboard-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background-color: var(--bg-color-light);
+    border-radius: 8px;
+}
+
+/* Estilos del Encabezado del Dashboard (sin cambios) */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 10px 0;
+}
+
+.dashboard-header h1 {
+    font-size: 2em;
+    color: var(--dark-purple);
+    margin: 0;
+}
+
+.sort-by span {
+    font-size: 0.9em;
+    color: var(--light-text-color);
+    margin-right: 10px;
+}
+
+.sort-by select {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background-color: var(--card-bg);
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+/* Diseño de la Rejilla (Grid Layout) - ¡¡¡CAMBIOS CRÍTICOS AQUÍ!!! */
+.grid-layout {
+    display: grid;
+    /* Definimos las 3 columnas. Las primeras 2 son para 'invoice' y 'social'/'product'. La tercera para 'order' y 'best-selling'.
+       Ajustamos las proporciones para que la primera sección (invoice) sea 2/3 del total y la tercera columna 1/3.
+       Esto lo logramos con la proporción 2fr 1fr 1fr donde invoice ocupa las primeras dos.
+       Así: invoice (2fr) | order (1fr)
+             social (1fr) | product (1fr) | best-selling (1fr)
+       Para que 'invoice' tenga el ancho de 'social' y 'product', necesitamos 3 columnas y que 'invoice' ocupe 2 de ellas,
+       y 'order' ocupe la 3ra. En la segunda fila, 'social', 'product', 'best-selling' ocupan 1 columna cada uno.
+       Esto implica que el ancho de 'order' debe ser igual al de 'best-selling'.
+       Y el ancho de 'invoice' debe ser el doble de 'order'.
+
+       Vamos a usar 3 columnas. Las dos primeras juntas serán para Invoice. La tercera para Order.
+       En la segunda fila, Social y Product compartirán el espacio de Invoice. Best-Selling ocupará la misma 3ra columna que Order.
+       Para que 'invoice' tenga el ancho de 'social' y 'product' JUNTOS:
+       Podemos hacer 4 columnas: 1fr 1fr 1fr 1fr
+       invoice: span 2 columnas (1fr 1fr)
+       order: span 2 columnas (1fr 1fr)
+       social: span 1 (1fr)
+       product: span 1 (1fr)
+       best-selling: span 2 (1fr 1fr)
+
+       PERO, tu imagen sugiere 3 columnas visibles. Intentemos con 3 columnas y ajuste de spans.
+       Resumen de Facturación: Ocupa las primeras 2 columnas.
+       Estadísticas de Pedidos: Ocupa la 3ra columna.
+       Ventas por Fuente Social: Ocupa la 1ra columna.
+       Seguimiento de Productos: Ocupa la 2da columna.
+       Productos Más Vendidos: Ocupa la 3ra columna.
+
+       Esto significa que la primera columna debe ser más ancha que la segunda, o viceversa, para acomodar el contenido.
+       El ratio parece ser algo como 2:1 para invoice vs order, y luego 1:1:1 para la fila de abajo.
+       Esto no se alinea fácilmente con un `grid-template-columns` simple de 3 columnas de 1fr.
+
+       La mejor manera de replicar la imagen es con un diseño de 4 columnas invisibles (para alineación), o directamente con `grid-template-areas` y proporciones.
+
+       Si "Resumen de Facturación" (invoice) tiene el ancho de "Ventas por Fuente Social" (social) + "Seguimiento de Productos" (product),
+       y "Estadísticas de Pedidos" (order) tiene el mismo ancho que "Productos Más Vendidos" (best-selling),
+       y "Productos Más Vendidos" puede tener 2 productos en horizontal...
+       Esto implica que social, product, best-selling son casi de igual ancho.
+       Y (social + product) = invoice.
+       Y order = best-selling.
+
+       Esto sugiere 3 columnas: (social_width), (product_width), (best_selling_width)
+       Donde social_width + product_width = invoice_width
+       Y best_selling_width = order_width
+
+       Si asumimos que social, product y best-selling tienen anchuras similares (1fr cada uno),
+       entonces invoice ocuparía 2fr, y order/best-selling 1fr.
+       Lo que daría:
+       Grid de 3 columnas: 2fr 1fr 1fr
+    */
+    grid-template-columns: 2fr 1fr 1fr; /* Columna 1 + 2 son 2fr, Columna 3 es 1fr */
+    /* Definimos las áreas de la cuadrícula, para un control preciso */
+    grid-template-areas:
+        "invoice-area invoice-area order-area"
+        "social-area product-area best-selling-area";
+    gap: 20px; /* Espacio entre las tarjetas */
+}
+
+/* Asignar cada tarjeta a su área de la cuadrícula */
+.invoice-overview { grid-area: invoice-area; }
+.order-stats { grid-area: order-area; }
+.sales-by-social { grid-area: social-area; }
+.product-tracking { grid-area: product-area; }
+.best-selling-product { grid-area: best-selling-area; }
+
+
+/* Media Queries para Responsividad (AJUSTADAS PARA EL NUEVO LAYOUT) */
+@media (max-width: 1200px) {
+    .grid-layout {
+        /* Para tabletas, vamos a 2 columnas */
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas:
+            "invoice-area invoice-area" /* Invoice ocupa las 2 columnas superiores */
+            "order-area order-area"     /* Order ocupa las 2 columnas de la segunda fila */
+            "social-area product-area"  /* Social y Product dividen la tercera fila */
+            "best-selling-area best-selling-area"; /* Best-selling ocupa las 2 columnas al final */
+    }
+}
+
+@media (max-width: 768px) {
+    .grid-layout {
+        /* Para móviles, una sola columna apilada */
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "invoice-area"
+            "order-area"
+            "social-area"
+            "product-area"
+            "best-selling-area";
+    }
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .dashboard-header h1 {
+        margin-bottom: 10px;
+    }
+}
+
+
+/* Estilo Base para Todas las Tarjetas (Cards) (sin cambios) */
+.card {
+    background-color: var(--card-bg);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.card h2 {
+    font-size: 1.3em;
+    color: var(--text-color);
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+}
+
+/* Secciones Específicas (AJUSTES PARA LA ALINEACIÓN Y TAMAÑO DE LOS GRÁFICOS) */
+
+/* Resumen de Facturación */
+.invoice-overview {
+    display: flex;
+    flex-direction: column;
+}
+
+.invoice-overview .total-revenue {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.invoice-overview .total-revenue h3 {
+    font-size: 1.1em;
+    color: var(--light-text-color);
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.invoice-overview .revenue-amount {
+    font-size: 2.2em;
+    font-weight: bold;
+    color: var(--primary-purple);
+    margin: 0 0 5px 0;
+}
+
+.invoice-overview .date-range {
+    font-size: 0.85em;
+    color: var(--light-text-color);
+    margin-bottom: 15px;
+}
+
+.revenue-trend {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    height: 50px;
+}
+
+.revenue-trend canvas {
+    max-height: 50px;
+    width: 150px !important;
+}
+
+.revenue-trend .percentage {
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.revenue-trend .percentage.negative {
+    color: var(--negative-red);
+}
+
+.metrics {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.metric-item {
+    text-align: center;
+}
+
+.metric-item .value {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--text-color);
+    display: block;
+    margin-bottom: 5px;
+}
+
+.metric-item .label {
+    font-size: 0.85em;
+    color: var(--light-text-color);
+}
+
+/* Tamaño del contenedor del gráfico de barras para Resumen de Facturación */
+.invoice-overview .chart-container {
+    position: relative;
+    height: 250px; /* Mantener la altura si se ve bien */
+    width: 100%;
+    margin-top: 20px;
+}
+
+
+/* Order Stats */
+.order-stats .chart-container-doughnut {
+    height: 200px; /* Altura fija para el gráfico de dona */
+    width: 200px; /* Ancho fijo para el gráfico de dona */
+    margin: 0 auto 20px auto; /* Centrar y añadir margen */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.order-details {
+    margin-top: 20px;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 0.95em;
+}
+
+.order-item .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+.order-item .dot.completed { background-color: var(--primary-purple); }
+.order-item .dot.processing { background-color: var(--neutral-blue); }
+.order-item .dot.cancelled { background-color: var(--negative-red); }
+
+.order-item span {
+    flex-grow: 1;
+}
+
+.order-item .count {
+    font-weight: bold;
+    margin-left: auto;
+    margin-right: 10px;
+    min-width: 60px;
+    text-align: right;
+}
+
+.order-item .percentage {
+    font-weight: bold;
+    font-size: 0.85em;
+    min-width: 50px;
+    text-align: right;
+}
+
+.order-item .percentage.positive { color: var(--positive-green); }
+.order-item .percentage.negative { color: var(--negative-red); }
+.order-item .percentage.neutral { color: var(--light-text-color); }
+
+
+/* Sales By Social Source (sin cambios internos) */
+.social-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.social-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+.social-item:last-child {
+    border-bottom: none;
+}
+
+.social-item .social-info {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.social-item .social-info i {
+    font-size: 1.5em;
+    margin-right: 15px;
+    width: 30px;
+    text-align: center;
+}
+
+.social-item .social-info .subtext {
+    display: block;
+    font-size: 0.8em;
+    color: var(--light-text-color);
+}
+
+.social-item .sales-count {
+    font-size: 0.9em;
+    color: var(--light-text-color);
+    margin-right: 15px;
+    min-width: 100px;
+    text-align: right;
+}
+
+.social-item .revenue-amount {
+    font-weight: bold;
+    margin-right: 15px;
+    min-width: 80px;
+    text-align: right;
+}
+
+.social-item .percentage {
+    font-weight: bold;
+    font-size: 0.8em;
+    min-width: 40px;
+    text-align: right;
+}
+
+.social-item .percentage.positive { color: var(--positive-green); }
+.social-item .percentage.negative { color: var(--negative-red); }
+.social-item .percentage.neutral { color: var(--neutral-blue); }
+
+.social-item .facebook { color: var(--facebook-blue); }
+.social-item .twitter { color: var(--twitter-blue); }
+.social-item .linkedin { color: var(--linkedin-blue); }
+.social-item .youtube { color: var(--youtube-red); }
+.social-item .instagram {
+    background: var(--instagram-gradient);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+
+/* Product Tracking (sin cambios internos) */
+.tracking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.tracking-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+.tracking-item:last-child {
+    border-bottom: none;
+}
+
+.tracking-item .icon {
+    font-size: 1.2em;
+    color: var(--primary-purple);
+    margin-right: 15px;
+}
+
+.tracking-item .status {
+    display: block;
+    font-size: 0.8em;
+    color: var(--light-text-color);
+    margin-top: 2px;
+}
+
+.tracking-item .time {
+    font-size: 0.8em;
+    color: var(--light-text-color);
+    text-align: right;
+    line-height: 1.2;
+}
+
+.small-tracking-chart {
+    height: 80px;
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.small-tracking-chart canvas {
+    max-height: 80px;
+}
+
+/* Best Selling Product */
+/* Ajuste para que los dos productos quepan horizontalmente dentro de esta tarjeta */
+.best-selling-product .product-cards {
+    display: flex;
+    gap: 15px; /* Reducido un poco el gap para que quepan mejor */
+    flex-wrap: wrap; /* Asegura que se envuelvan si no hay espacio */
+    justify-content: center; /* Centra los productos */
+}
+
+.best-selling-product .product-item {
+    background-color: var(--bg-color-light);
+    border-radius: 8px;
+    padding: 15px; /* Padding un poco menor para ahorrar espacio */
+    text-align: center;
+    /* Ajustamos el flex-basis para que cada item ocupe la mitad del contenedor (menos el gap) */
+    flex: 1 1 calc(50% - 10px); /* 50% menos la mitad del gap */
+    min-width: 120px; /* Un ancho mínimo más pequeño para que quepan en la tercera columna */
+    max-width: 180px; /* Un ancho máximo para que no se estiren demasiado */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    position: relative;
+    margin-bottom: 10px; /* Margen inferior para separar si se envuelven */
+}
+
+.product-item img {
+    max-width: 100%;
+    height: auto;
+    /* Si las imágenes son 100x100px y quieres que se vean más grandes en la tarjeta,
+       puedes establecer un ancho fijo, pero con cuidado de no pixelar si el original es pequeño. */
+    /* width: 100px; /* Esto forzaría 100px si el contenedor lo permite */
+    /* height: 100px; */
+    object-fit: contain; /* Asegura que la imagen completa se vea sin recortar */
+    border-radius: 5px;
+    margin-bottom: 10px; /* Reducido un poco */
+}
+
+.product-item h3 {
+    font-size: 0.9em; /* Fuente más pequeña para que quepa mejor */
+    margin-top: 0;
+    margin-bottom: 5px; /* Reducido */
+    color: var(--text-color);
+    line-height: 1.3;
+}
+
+.product-item .price-old {
+    text-decoration: line-through;
+    color: var(--light-text-color);
+    font-size: 0.8em; /* Fuente más pequeña */
+    margin-bottom: 3px;
+}
+
+.product-item .price-new {
+    font-size: 1.1em; /* Fuente más pequeña */
+    font-weight: bold;
+    color: var(--primary-purple);
+    margin-bottom: 10px; /* Reducido */
+}
+
+.buy-button {
+    background-color: var(--primary-purple);
+    color: white;
+    padding: 8px 12px; /* Padding más pequeño */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85em; /* Fuente más pequeña */
+    transition: background-color 0.3s ease;
+}
+
+.buy-button:hover {
+    background-color: var(--dark-purple);
+}
+
+.buy-button i {
+    margin-right: 5px; /* Margen más pequeño */
+}
+
+.sale-badge {
+    position: absolute;
+    top: 10px; /* Ajuste de posición */
+    right: 10px; /* Ajuste de posición */
+    background-color: var(--positive-green);
+    color: white;
+    padding: 4px 8px; /* Padding más pequeño */
+    border-radius: 5px;
+    font-size: 0.7em; /* Fuente más pequeña */
+    font-weight: bold;
+    z-index: 10;
+}
+
+
+/* Estilos del contenedor de gráficos para Chart.js (sin cambios) */
+.chart-container {
+    position: relative;
+    height: 250px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+}
+
+.wrapper {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    overflow-y: auto;
+    position: fixed;
+    height: 100vh;
+}
+
+.sidebar-header h3 {
+    margin-bottom: 30px;
+    font-size: 1.5rem;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.nav-link {
+    color: white;
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateX(5px);
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    margin-left: 250px;
+    overflow-y: auto;
+}
+
+/* Header */
+.top-header {
+    background: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.top-header h1 {
+    color: #333;
+    font-size: 2rem;
+}
+
+.header-right {
+    font-size: 0.95rem;
+    color: #666;
+}
+
+/* Content */
+.content {
+    padding: 30px;
+}
+
+/* Cards Container */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.card-primary .card-icon { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.card-success .card-icon { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+.card-warning .card-icon { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+.card-danger .card-icon { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+
+.card-content h3 {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.card-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.card-content small {
+    color: #999;
+    font-size: 0.85rem;
+}
+
+/* Stats Container */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stats-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stats-card h3 {
+    margin-bottom: 20px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stats-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.stat-item {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #667eea;
+}
+
+/* Top Products */
+.top-products {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.top-products h3 {
+    margin-bottom: 20px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table {
+    margin: 0;
+}
+
+.table thead {
+    background-color: #f8f9fa;
+}
+
+.table th {
+    border: none;
+    color: #666;
+    font-weight: 600;
+}
+
+.table td {
+    border-color: #e0e0e0;
+    vertical-align: middle;
+}
+
+.badge {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+}
+
+/* Product Cards */
+.product-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.product-image {
+    position: relative;
+    overflow: hidden;
+}
+
+.sale-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ff6b6b;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    z-index: 10;
+}
+
+.product-info {
+    padding: 12px;
+}
+
+.product-info h6 {
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 600;
+}
+
+.price {
+    color: #667eea;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin: 8px 0;
+}
+
+.product-stats {
+    display: flex;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .wrapper {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .cards-container {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-container {
+        grid-template-columns: 1fr;
+    }
+
+    .top-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+}
