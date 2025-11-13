@@ -1,4 +1,5 @@
 let productoActual = null;
+let modalEditarDetalles = null;
 
 // Cargar detalles del producto
 async function cargarDetalles() {
@@ -36,8 +37,13 @@ function mostrarDetalles() {
             <img src="${productoActual.imagen}" class="card-img-top" alt="${productoActual.nombre}">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-start mb-3">
-                    <h1>${productoActual.nombre}</h1>
-                    ${productoActual.badge ? `<span class="badge bg-warning text-dark">${productoActual.badge}</span>` : ''}
+                    <div>
+                        <h1>${productoActual.nombre}</h1>
+                        ${productoActual.badge ? `<span class="badge bg-warning text-dark">${productoActual.badge}</span>` : ''}
+                    </div>
+                    <button class="btn btn-warning" onclick="abrirModalEditarDetalles()">
+                        <i class="bi bi-pencil"></i> Editar
+                    </button>
                 </div>
                 
                 <p class="text-muted mb-3">
@@ -63,6 +69,102 @@ function mostrarDetalles() {
             </div>
         </div>
     `;
+}
+
+function abrirModalEditarDetalles() {
+    // Llenar los campos del modal
+    document.getElementById('edit-id-detalles').value = productoActual.id;
+    document.getElementById('edit-nombre-detalles').value = productoActual.nombre;
+    document.getElementById('edit-descripcion-detalles').value = productoActual.descripcion;
+    document.getElementById('edit-precio-detalles').value = productoActual.precio;
+    document.getElementById('edit-categoria-detalles').value = productoActual.categoria;
+    document.getElementById('edit-etiquetas-detalles').value = productoActual.etiquetas.join(', ');
+    document.getElementById('edit-badge-detalles').value = productoActual.badge || '';
+    document.getElementById('previewImagenEditarDetalles').innerHTML = `
+        <img src="${productoActual.imagen}" alt="Preview" style="max-width: 200px; border-radius: 8px;">
+    `;
+
+    // Abrir modal
+    if (!modalEditarDetalles) {
+        modalEditarDetalles = new bootstrap.Modal(document.getElementById('modalEditarDetalles'));
+    }
+    modalEditarDetalles.show();
+}
+
+document.getElementById('edit-imagen-file-detalles').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const previewDiv = document.getElementById('previewImagenEditarDetalles');
+    
+    if (file) {
+        if (file.size > 5 * 1024 * 1024) {
+            alert('El archivo es muy grande. Máximo 5MB');
+            this.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            previewDiv.innerHTML = `
+                <img src="${event.target.result}" alt="Preview" style="max-width: 200px; border-radius: 8px;">
+            `;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+async function guardarProductoEditadoDetalles() {
+    const id = document.getElementById('edit-id-detalles').value;
+    const imageFile = document.getElementById('edit-imagen-file-detalles').files[0];
+    
+    let imagenData = null;
+    
+    // Si hay una nueva imagen, convertirla a Base64
+    if (imageFile) {
+        imagenData = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.readAsDataURL(imageFile);
+        });
+    }
+
+    const productoActualizado = {
+        nombre: document.getElementById('edit-nombre-detalles').value,
+        descripcion: document.getElementById('edit-descripcion-detalles').value,
+        precio: document.getElementById('edit-precio-detalles').value,
+        categoria: document.getElementById('edit-categoria-detalles').value,
+        badge: document.getElementById('edit-badge-detalles').value,
+        etiquetas: document.getElementById('edit-etiquetas-detalles').value
+            .split(',')
+            .map(e => e.trim())
+            .filter(e => e),
+        imagen: imagenData || undefined
+    };
+
+    try {
+        const response = await fetch(`http://localhost:3000/api/productos/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(productoActualizado)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // Actualizar el producto actual
+            productoActual = { ...productoActual, ...data.producto };
+            
+            mostrarDetalles();
+            modalEditarDetalles.hide();
+            alert('Producto actualizado exitosamente');
+        } else {
+            alert('Error: ' + data.error);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al actualizar el producto');
+    }
 }
 
 async function cargarComentarios() {
