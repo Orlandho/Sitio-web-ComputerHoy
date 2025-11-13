@@ -22,52 +22,37 @@
 <body>
   <!-- Header con la barra de navegación -->
   <header>
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-      <div class="container-fluid">
-        <!-- Botones izquierdos -->
-        <div class="btn-group-left">
-          <button id="btn-inicio" class="btn btn-outline-light">Inicio</button>
-          <!-- Menú desplegable de categorías y badges -->
-          <div class="dropdown">
-            <button id="btn-categoria" class="btn btn-outline-light dropdown-toggle" type="button"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              Categoría
-            </button>
-            <ul class="dropdown-menu" id="menu-categorias">
-              <li>
-                <h6 class="dropdown-header">Categorías</h6>
-              </li>
-              <li><button class="dropdown-item filtro-categoria" data-cat="Refrigeración">Refrigeración</button></li>
-              <li><button class="dropdown-item filtro-categoria" data-cat="Limpieza">Limpieza</button></li>
-              <li><button class="dropdown-item filtro-categoria" data-cat="Video">Video</button></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li>
-                <h6 class="dropdown-header">Badges</h6>
-              </li>
-              <li><button class="dropdown-item filtro-badge" data-badge="oferta">Oferta</button></li>
-              <li><button class="dropdown-item filtro-badge" data-badge="nuevo">Nuevo</button></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><button class="dropdown-item text-danger" id="btn-todo">Mostrar todo</button></li>
-            </ul>
-          </div>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <!-- Botones izquierdos -->
+            <div class="btn-group-left">
+                <button class="btn btn-outline-light">Inicio</button>
+                <div class="dropdown d-inline-block">
+                    <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Categoría
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><button class="dropdown-item" type="button">Monitores</button></li>
+                        <li><button class="dropdown-item" type="button">Teclados</button></li>
+                        <li><button class="dropdown-item" type="button">Mouse</button></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button class="dropdown-item" type="button">Otros</button></li>
+                    </ul>
+                </div>
+                <!-- Nuevo botón Publicar -->
+                <button class="btn btn-outline-light">Publicar</button>
+            </div>
 
-        </div>
+            <!-- Buscador centrado -->
+            <div class="search-container">
+                <input class="form-control" type="search" placeholder="Buscar productos..." aria-label="Buscar">
+            </div>
 
-        <!-- Buscador centrado -->
-        <div class="search-container d-flex align-items-center">
-          <input id="input-buscar" class="form-control" type="search" placeholder="Buscar productos..."
-            aria-label="Buscar">
-          <button id="btn-buscar" class="btn btn-outline-light ms-2" type="button">
-            <i class="bi bi-search"></i>
-          </button>
+            <!-- Botón Login lado derecho -->
+            <div class="btn-group-right">
+                <button class="btn btn-primary">Login</button>
+            </div>
         </div>
-
-        </div>
-      </div>
     </nav>
   </header>
 
