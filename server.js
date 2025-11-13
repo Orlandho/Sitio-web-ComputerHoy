@@ -82,23 +82,23 @@ app.post('/api/productos', (req, res) => {
     }
 });
 
-// DELETE - Eliminar producto (opcional)
+// DELETE - Eliminar producto
 app.delete('/api/productos/:id', (req, res) => {
-    const { id } = req.params;
-    const db = leerDB();
+  const { id } = req.params;
+  const db = leerDB();
+  const idx = db.productos.findIndex(p => p.id === id);
 
-    const index = db.productos.findIndex(p => p.id === id);
-    if (index === -1) {
-        return res.status(404).json({ error: 'Producto no encontrado' });
-    }
+  if (idx === -1) {
+    return res.status(404).json({ error: 'Producto no encontrado' });
+  }
 
-    db.productos.splice(index, 1);
+  db.productos.splice(idx, 1);
 
-    if (escribirDB(db)) {
-        res.json({ success: true, mensaje: 'Producto eliminado' });
-    } else {
-        res.status(500).json({ error: 'Error al eliminar el producto' });
-    }
+  if (escribirDB(db)) {
+    return res.json({ success: true, mensaje: 'Producto eliminado' });
+  } else {
+    return res.status(500).json({ error: 'Error al eliminar producto' });
+  }
 });
 
 // PUT - Actualizar likes

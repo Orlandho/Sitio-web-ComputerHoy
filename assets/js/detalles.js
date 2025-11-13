@@ -41,9 +41,14 @@ function mostrarDetalles() {
                         <h1>${productoActual.nombre}</h1>
                         ${productoActual.badge ? `<span class="badge bg-warning text-dark">${productoActual.badge}</span>` : ''}
                     </div>
-                    <button class="btn btn-warning" onclick="abrirModalEditarDetalles()">
-                        <i class="bi bi-pencil"></i> Editar
-                    </button>
+                    <div>
+                        <button class="btn btn-warning me-2" onclick="abrirModalEditarDetalles()">
+                            <i class="bi bi-pencil"></i> Editar
+                        </button>
+                        <button class="btn btn-danger" onclick="eliminarProductoDetalles()">
+                            <i class="bi bi-trash"></i> Eliminar
+                        </button>
+                    </div>
                 </div>
                 
                 <p class="text-muted mb-3">
@@ -135,7 +140,7 @@ async function guardarProductoEditadoDetalles() {
             .split(',')
             .map(e => e.trim())
             .filter(e => e),
-        // sólo incluir imagen si existe nueva; undefined no sobrescribe en servidor si manejo correcto
+        // sólo incluir imagen si existe nueva; undefined no sobrescribe in servidor si manejo correcto
         imagen: imagenData || undefined
     };
 
@@ -268,6 +273,29 @@ document.getElementById('formComentario').addEventListener('submit', async (e) =
         alert('No se pudo enviar el comentario.');
     }
 });
+
+// Nueva función para eliminar producto desde la vista detalle
+async function eliminarProductoDetalles() {
+    if (!confirm('¿Eliminar este producto? Esta acción no se puede deshacer.')) return;
+
+    try {
+        const response = await fetch(`/api/productos/${encodeURIComponent(productoActual.id)}`, {
+            method: 'DELETE'
+        });
+
+        const text = await response.text();
+        if (!response.ok) {
+            throw new Error(`Servidor respondió ${response.status}: ${text}`);
+        }
+
+        // Redirigir al listado principal
+        alert('Producto eliminado correctamente');
+        window.location.href = 'index.html';
+    } catch (error) {
+        console.error('Error eliminando producto:', error);
+        alert('No se pudo eliminar el producto.');
+    }
+}
 
 // Inicializar
 document.addEventListener('DOMContentLoaded', cargarDetalles);
