@@ -64,6 +64,12 @@ function mostrarDetalles() {
                     ${productoActual.etiquetas.map(e => `<span class="badge bg-secondary me-1">${e}</span>`).join('')}
                 </div>
                 
+                <div class="mb-3">
+                    <small class="text-muted">
+                        <i class="bi bi-eye"></i> ${productoActual.vistas || 0} vistas
+                    </small>
+                </div>
+                
                 <small class="text-muted">Publicado: ${new Date(productoActual.fechaPublicacion).toLocaleDateString('es-ES')}</small>
                 
                 <div class="mt-4">

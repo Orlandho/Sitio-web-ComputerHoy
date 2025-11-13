@@ -207,6 +207,26 @@ app.delete('/api/productos/:id/comentarios/:comentarioId', (req, res) => {
   }
 });
 
+// PUT - Incrementar vistas de un producto
+app.put('/api/productos/:id/vistas', (req, res) => {
+  const { id } = req.params;
+  const db = leerDB();
+  const producto = db.productos.find(p => p.id === id);
+
+  if (!producto) {
+    return res.status(404).json({ error: 'Producto no encontrado' });
+  }
+
+  // Incrementar vistas (inicializar en 0 si no existe)
+  producto.vistas = (producto.vistas || 0) + 1;
+
+  if (escribirDB(db)) {
+    return res.json({ success: true, vistas: producto.vistas });
+  } else {
+    return res.status(500).json({ error: 'Error al actualizar vistas' });
+  }
+});
+
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

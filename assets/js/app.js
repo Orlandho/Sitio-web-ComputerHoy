@@ -44,7 +44,6 @@ function renderizarProductos() {
             const categoria = String(p.categoria || '').toLowerCase();
             const etiquetas = (p.etiquetas || []).map(e => String(e).toLowerCase()).join(' ');
 
-            // Buscar coincidencias en nombre, descripción, categoría o etiquetas
             const coincide = nombre.includes(term) || 
                            descripcion.includes(term) || 
                            categoria.includes(term) || 
@@ -83,6 +82,7 @@ function renderizarProductos() {
                     `).join('')}
                 </div>
                 <small class="text-muted d-block">Publicado: ${producto.fechaPublicacion ? new Date(producto.fechaPublicacion).toLocaleDateString('es-ES') : ''}</small>
+                <small class="text-muted d-block"><i class="bi bi-eye"></i> ${producto.vistas || 0} vistas</small>
                 <div class="mt-3 d-flex gap-2">
                     <button class="btn btn-sm btn-outline-primary flex-grow-1" onclick="darLike('${producto.id}', event)">
                         <i class="bi bi-heart"></i> <span id="likes-${producto.id}">${producto.likes ?? 0}</span>
@@ -180,6 +180,34 @@ async function darLike(productoId, event) {
     } catch (error) {
         console.error('Error al dar like:', error);
     }
+}
+
+// Función para ver detalles y registrar vista
+async function verDetalles(productoId, event) {
+    if (event) event.stopPropagation();
+
+    // Registrar vista en el servidor
+    try {
+        const response = await fetch(`/api/productos/${encodeURIComponent(productoId)}/vistas`, {
+            method: 'PUT'
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            // Actualizar el producto local con las nuevas vistas
+            const producto = productos.find(p => p.id === productoId);
+            if (producto) {
+                producto.vistas = data.vistas;
+                renderizarProductos();
+            }
+        }
+    } catch (error) {
+        console.error('Error registrando vista:', error);
+    }
+
+    // Guardar en sesión y navegar
+    sessionStorage.setItem('productoActual', productoId);
+    window.location.href = 'detalles.html';
 }
 
 function mostrarMensajeVacio() {
