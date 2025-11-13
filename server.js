@@ -156,6 +156,29 @@ app.post('/api/productos/:id/comentarios', (req, res) => {
     }
 });
 
+// PUT - Actualizar producto
+app.put('/api/productos/:id', (req, res) => {
+  const { id } = req.params;
+  const { nombre, categoria, precio, badge, etiquetas, imagen, descripcion } = req.body;
+  const db = leerDB();
+  const producto = db.productos.find(p => p.id === id);
+  if (!producto) return res.status(404).json({ error: 'Producto no encontrado' });
+
+  if (nombre !== undefined) producto.nombre = nombre;
+  if (categoria !== undefined) producto.categoria = categoria;
+  if (precio !== undefined) producto.precio = parseFloat(precio);
+  if (badge !== undefined) producto.badge = badge;
+  if (etiquetas !== undefined) producto.etiquetas = etiquetas;
+  if (imagen !== undefined) producto.imagen = imagen;
+  if (descripcion !== undefined) producto.descripcion = descripcion;
+
+  if (escribirDB(db)) {
+    res.json({ success: true, producto });
+  } else {
+    res.status(500).json({ error: 'Error al guardar' });
+  }
+});
+
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

@@ -4,18 +4,18 @@ let modalEditarDetalles = null;
 // Cargar detalles del producto
 async function cargarDetalles() {
     const productoId = sessionStorage.getItem('productoActual');
-    
     if (!productoId) {
         window.location.href = 'index.html';
         return;
     }
 
     try {
-        const response = await fetch('http://localhost:3000/api/productos');
+        // usar ruta root-relative
+        const response = await fetch('/api/productos');
+        if (!response.ok) throw new Error('Error cargando productos: ' + response.status);
         const data = await response.json();
-        
+
         productoActual = data.productos.find(p => p.id === productoId);
-        
         if (!productoActual) {
             window.location.href = 'index.html';
             return;
@@ -115,10 +115,8 @@ document.getElementById('edit-imagen-file-detalles').addEventListener('change', 
 async function guardarProductoEditadoDetalles() {
     const id = document.getElementById('edit-id-detalles').value;
     const imageFile = document.getElementById('edit-imagen-file-detalles').files[0];
-    
+
     let imagenData = null;
-    
-    // Si hay una nueva imagen, convertirla a Base64
     if (imageFile) {
         imagenData = await new Promise((resolve) => {
             const reader = new FileReader();
@@ -137,51 +135,51 @@ async function guardarProductoEditadoDetalles() {
             .split(',')
             .map(e => e.trim())
             .filter(e => e),
+        // sólo incluir imagen si existe nueva; undefined no sobrescribe en servidor si manejo correcto
         imagen: imagenData || undefined
     };
 
     try {
-        const response = await fetch(`http://localhost:3000/api/productos/${id}`, {
+        // usar ruta root-relative; comprobar response.ok y manejar errores
+        const response = await fetch(`/api/productos/${encodeURIComponent(id)}`, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(productoActualizado)
         });
 
-        const data = await response.json();
-
-        if (response.ok) {
-            // Actualizar el producto actual
-            productoActual = { ...productoActual, ...data.producto };
-            
-            mostrarDetalles();
-            modalEditarDetalles.hide();
-            alert('Producto actualizado exitosamente');
-        } else {
-            alert('Error: ' + data.error);
+        if (!response.ok) {
+            const text = await response.text();
+            throw new Error(`Servidor respondió ${response.status}: ${text}`);
         }
+
+        const data = await response.json();
+        // actualizar productoActual con la respuesta del servidor si viene el producto actualizado
+        productoActual = { ...productoActual, ...(data.producto || {}) };
+
+        mostrarDetalles();
+        modalEditarDetalles.hide();
+        alert('Producto actualizado exitosamente');
     } catch (error) {
         console.error('Error:', error);
-        alert('Error al actualizar el producto');
+        alert('Error al actualizar el producto: ' + (error.message || error));
     }
 }
 
 async function cargarComentarios() {
     try {
-        const response = await fetch('http://localhost:3000/api/productos');
+        const response = await fetch('/api/productos');
+        if (!response.ok) throw new Error('Error cargando productos: ' + response.status);
         const data = await response.json();
-        
+
         const producto = data.productos.find(p => p.id === productoActual.id);
-        const comentarios = producto.comentarios || [];
-        
+        const comentarios = producto?.comentarios || [];
+
         const div = document.getElementById('listaComentarios');
-        
         if (comentarios.length === 0) {
             div.innerHTML = '<p class="text-muted">No hay comentarios aún.</p>';
             return;
         }
-        
+
         div.innerHTML = comentarios.map(com => `
             <div class="card mb-3">
                 <div class="card-body">
@@ -193,15 +191,14 @@ async function cargarComentarios() {
         `).join('');
     } catch (error) {
         console.error('Error cargando comentarios:', error);
+        document.getElementById('listaComentarios').innerHTML = '<p class="text-danger">No se pudieron cargar los comentarios.</p>';
     }
 }
 
 async function darLike(productoId) {
     try {
-        const response = await fetch(`http://localhost:3000/api/productos/${productoId}/like`, {
-            method: 'PUT'
-        });
-
+        const response = await fetch(`/api/productos/${encodeURIComponent(productoId)}/like`, { method: 'PUT' });
+        if (!response.ok) throw new Error('Error al dar like: ' + response.status);
         const data = await response.json();
         if (data.success) {
             productoActual.likes = data.likes;
@@ -215,27 +212,29 @@ async function darLike(productoId) {
 // Manejar formulario de comentarios
 document.getElementById('formComentario').addEventListener('submit', async (e) => {
     e.preventDefault();
-
     const autor = document.getElementById('inputAutor').value;
     const texto = document.getElementById('inputTexto').value;
 
     try {
-        const response = await fetch(`http://localhost:3000/api/productos/${productoActual.id}/comentarios`, {
+        const response = await fetch(`/api/productos/${encodeURIComponent(productoActual.id)}/comentarios`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ autor, texto })
         });
 
-        const data = await response.json();
+        if (!response.ok) {
+            const text = await response.text();
+            throw new Error(`Error servidor: ${text}`);
+        }
 
+        const data = await response.json();
         if (data.success) {
             document.getElementById('formComentario').reset();
             cargarComentarios();
         }
     } catch (error) {
         console.error('Error:', error);
+        alert('No se pudo enviar el comentario.');
     }
 });
 
