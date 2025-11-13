@@ -681,32 +681,107 @@ async function eliminarProducto(id) {
   }
 }
 
-
-
-
-// ------ Utilidades ------
-function escapeHtml(s) {
-  return s.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+// Función para cargar productos desde db.json
+async function cargarProductos() {
+    try {
+        const response = await fetch('db.json');
+        if (!response.ok) throw new Error('Error al cargar db.json');
+        
+        const data = await response.json();
+        productos = data.productos || [];
+        
+        // Ordenar productos por fecha (más nuevos primero)
+        productos.sort((a, b) => new Date(b.fechaPublicacion) - new Date(a.fechaPublicacion));
+        
+        renderizarProductos();
+    } catch (error) {
+        console.error('Error cargando productos:', error);
+        mostrarMensajeVacio();
+    }
 }
-function genId() {
-  return "prd-" + Math.random().toString(36).slice(2, 8);
+
+// Función para renderizar los productos en el feed
+function renderizarProductos() {
+    const feed = document.getElementById('feed');
+    const msgVacio = document.getElementById('mensaje-vacio');
+    
+    if (!feed) return;
+    
+    if (productos.length === 0) {
+        feed.innerHTML = '';
+        msgVacio.classList.remove('d-none');
+        return;
+    }
+    
+    msgVacio.classList.add('d-none');
+    
+    feed.innerHTML = productos.map(producto => `
+        <div class="card card-producto">
+            <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title">${producto.nombre}</h5>
+                    ${producto.badge ? `<span class="badge bg-warning text-dark">${producto.badge}</span>` : ''}
+                </div>
+                <p class="text-muted small">${producto.categoria}</p>
+                <p class="card-text">${producto.descripcion}</p>
+                <div class="mb-3">
+                    <span class="badge bg-primary">S/ ${producto.precio}</span>
+                </div>
+                <div class="mb-3">
+                    ${producto.etiquetas.map(etiqueta => `
+                        <span class="badge bg-secondary me-1">${etiqueta}</span>
+                    `).join('')}
+                </div>
+                <small class="text-muted d-block">Publicado: ${new Date(producto.fechaPublicacion).toLocaleDateString('es-ES')}</small>
+                <div class="mt-3 d-flex gap-2">
+                    <button class="btn btn-sm btn-outline-primary flex-grow-1">
+                        <i class="bi bi-heart"></i> ${producto.likes}
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary flex-grow-1">
+                        <i class="bi bi-chat"></i> Comentar
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
 }
 
-// Evita 'loadProductos is not defined' con una implementación mínima
-async function loadProductos() {
-  const res = await fetch('http://localhost:3000/productos');
-  const productos = await res.json(); return productos;
-
+// Función para mostrar mensaje vacío
+function mostrarMensajeVacio() {
+    const feed = document.getElementById('feed');
+    const msgVacio = document.getElementById('mensaje-vacio');
+    
+    if (feed) feed.innerHTML = '';
+    if (msgVacio) msgVacio.classList.remove('d-none');
 }
 
-// Llamada inicial (si antes se llamaba desde aquí)
-document.addEventListener('DOMContentLoaded', loadProductos);
+// Ajustar layout según tamaño de pantalla
+function adjustLayout() {
+    const feed = document.getElementById('feed');
+    const windowWidth = window.innerWidth;
 
-function ajustarEspacioNavbar() {
-  const nav = document.querySelector('.navbar');
-  if (!nav) return;
-  // añadir extra para separación visual (en px)
-  const extra = 24;
-  const h = nav.offsetHeight + extra;
-  document.documentElement.style.setProperty('--navbar-space', h + 'px');
+    if (feed) {
+        if (windowWidth < 576) {
+            feed.style.gridTemplateColumns = '1fr';
+        } else if (windowWidth < 768) {
+            feed.style.gridTemplateColumns = 'repeat(2, 1fr)';
+        } else if (windowWidth < 1200) {
+            feed.style.gridTemplateColumns = 'repeat(3, 1fr)';
+        } else {
+            feed.style.gridTemplateColumns = 'repeat(3, 1fr)';
+        }
+    }
 }
+
+// Inicialización
+document.addEventListener('DOMContentLoaded', () => {
+    // Cargar productos
+    cargarProductos();
+    
+    // Ajustar layout inicial
+    adjustLayout();
+    
+    // Configurar evento resize
+    window.addEventListener('resize', adjustLayout);
+});

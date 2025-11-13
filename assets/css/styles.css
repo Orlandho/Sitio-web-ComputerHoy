@@ -207,136 +207,42 @@ main {
 
 /* Feed de productos */
 #feed {
-    padding-top: 2rem;
-    margin-bottom: 3rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    padding: 2rem 0;
 }
 
-/* Footer */
-footer {
-    margin-top: auto;
-    padding: 1.5rem 0;
-    background-color: #ffffff;
-    border-top: 1px solid #e2e8f0;
-}
-
-footer p {
-    color: var(--text-light);
-}
-
-/* Estilos para la barra de navegación */
-.navbar {
-    padding: 1rem 0;
-    background: linear-gradient(to right, #1e40af, #2563eb) !important;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    position: relative;
-    z-index: 600;
-}
-
-.navbar .container-fluid {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 2rem;
-    flex-wrap: nowrap; /* Evita que los elementos se envuelvan */
-}
-
-.navbar .btn-outline-light:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    transform: translateY(-1px);
-    transition: all 0.2s ease;
-}
-
-/* Grupos de botones laterales */
-.navbar .btn-group-left,
-.navbar .btn-group-right {
-    flex: 0 0 auto; /* No crece ni se encoge, mantiene su tamaño */
-    display: flex;
-    gap: 0.5rem;
-    min-width: fit-content; /* Asegura que los botones mantengan su ancho mínimo */
-}
-
-/* Contenedor del buscador */
-.search-container {
-    flex: 1; /* Permite que el buscador ocupe el espacio disponible */
-    min-width: 200px; /* Ancho mínimo antes de colapsar */
-    max-width: 500px; /* Ancho máximo para no estirarse demasiado */
-    margin: 0 1rem; /* Mantiene espacio con los botones */
-}
-
-.search-container input {
-    width: 100%;
-    border-radius: 20px;
-    padding: 0.5rem 1.5rem;
-    border: 2px solid transparent;
-    transition: all 0.2s ease;
-}
-
-.search-container input:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-}
-
-/* Ajuste para el contenido principal */
-main {
-    margin-top: 2rem;
-    margin-bottom: 0; /* Quitamos el margen inferior */
-}
-
-/* Estilos para la sección de bienvenida */
-.welcome-section {
-    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
-    padding: 6rem 0 3rem 0;  /* Aumentamos el padding superior */
-    margin-bottom: 2rem;
-    border-bottom: 1px solid #e2e8f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 40vh;
-}
-
-.welcome-section .container {
-    max-width: 800px;
-    width: 100%;
-    padding: 0 1rem;
-}
-
-.welcome-section h1 {
-    color: var(--text-dark);
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 2.5rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.welcome-image {
-    max-width: 500px;
-    width: 90%;
-    height: auto;
+/* Tarjetas de productos */
+.card-producto {
+    border: none;
     border-radius: 12px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-    margin: 2rem auto;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Estilos para botones */
-.btn-primary {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    padding: 0.5rem 1.5rem;
-    border-radius: 20px;
-    transition: all 0.2s ease;
+.card-producto:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
 }
 
-.btn-primary:hover {
-    background-color: var(--secondary-color);
-    border-color: var(--secondary-color);
-    transform: translateY(-1px);
+.card-producto .card-img-top {
+    border-radius: 12px 12px 0 0;
+    height: 250px;
+    object-fit: cover;
 }
 
-/* Efectos hover generales */
-a, button {
-    transition: all 0.2s ease;
+/* Responsive */
+@media (max-width: 1200px) {
+    #feed {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    #feed {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Ajustes responsive */
