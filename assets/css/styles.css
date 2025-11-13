@@ -113,13 +113,10 @@ footer p {
 }
 
 .navbar .container-fluid {
-    max-width: 1200px;
-    margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 2rem;
-    flex-wrap: nowrap; /* Evita que los elementos se envuelvan */
+    gap: 1rem;
 }
 
 .navbar .btn-outline-light:hover {
@@ -139,23 +136,9 @@ footer p {
 
 /* Contenedor del buscador */
 .search-container {
-    flex: 1; /* Permite que el buscador ocupe el espacio disponible */
-    min-width: 200px; /* Ancho mínimo antes de colapsar */
-    max-width: 500px; /* Ancho máximo para no estirarse demasiado */
-    margin: 0 1rem; /* Mantiene espacio con los botones */
-}
-
-.search-container input {
-    width: 100%;
-    border-radius: 20px;
-    padding: 0.5rem 1.5rem;
-    border: 2px solid transparent;
-    transition: all 0.2s ease;
-}
-
-.search-container input:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    flex: 1;
+    max-width: 500px;
+    margin: 0 auto;
 }
 
 /* Ajuste para el contenido principal */

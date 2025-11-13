@@ -44,47 +44,47 @@ document.getElementById('formPublicar').addEventListener('submit', async functio
 
         // Crear objeto del producto
         const nuevoProducto = {
-            id: 'prd-' + Date.now(),
             nombre: document.getElementById('inputNombre').value,
             categoria: document.getElementById('inputCategoria').value,
-            precio: parseFloat(document.getElementById('inputPrecio').value),
+            precio: document.getElementById('inputPrecio').value,
             badge: document.getElementById('inputBadge').value,
             etiquetas: document.getElementById('inputEtiquetas').value
                 .split(',')
                 .map(e => e.trim())
                 .filter(e => e),
-            imagen: imagenBase64, // Guardamos la imagen en Base64
-            descripcion: document.getElementById('inputDescripcion').value,
-            fechaPublicacion: new Date().toISOString().split('T')[0],
-            likes: 0
+            imagen: imagenBase64,
+            descripcion: document.getElementById('inputDescripcion').value
         };
 
         try {
-            // Cargar db.json actual
-            const response = await fetch('db.json');
+            // Enviar al servidor
+            const response = await fetch('http://localhost:3000/api/productos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(nuevoProducto)
+            });
+
             const data = await response.json();
 
-            // Agregar nuevo producto
-            data.productos.unshift(nuevoProducto);
+            if (response.ok) {
+                mostrarExito('¡Producto publicado exitosamente!');
+                
+                // Limpiar formulario
+                document.getElementById('formPublicar').reset();
+                document.getElementById('previewImagen').innerHTML = '';
 
-            // Nota: En un servidor real, esto se guardaría en la base de datos
-            // Para desarrollo local, guardamos en localStorage
-            localStorage.setItem('productosComputerHoy', JSON.stringify(data.productos));
-
-            mostrarExito('¡Producto publicado exitosamente!');
-            
-            // Limpiar formulario
-            document.getElementById('formPublicar').reset();
-            document.getElementById('previewImagen').innerHTML = '';
-
-            // Redirigir a inicio después de 2 segundos
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 2000);
-
+                // Redirigir a inicio después de 2 segundos
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            } else {
+                mostrarError(data.error || 'Error al publicar el producto');
+            }
         } catch (error) {
             console.error('Error:', error);
-            mostrarError('Error al publicar el producto');
+            mostrarError('Error de conexión con el servidor');
         }
     };
 
