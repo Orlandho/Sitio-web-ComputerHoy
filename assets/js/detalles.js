@@ -175,23 +175,54 @@ async function cargarComentarios() {
         const comentarios = producto?.comentarios || [];
 
         const div = document.getElementById('listaComentarios');
+
         if (comentarios.length === 0) {
             div.innerHTML = '<p class="text-muted">No hay comentarios aún.</p>';
             return;
         }
 
+        // Mostrar botón eliminar junto al comentario
         div.innerHTML = comentarios.map(com => `
             <div class="card mb-3">
-                <div class="card-body">
-                    <h6 class="card-title">${com.autor}</h6>
-                    <p class="card-text">${com.texto}</p>
-                    <small class="text-muted">${new Date(com.fecha).toLocaleDateString('es-ES')}</small>
+                <div class="card-body d-flex justify-content-between align-items-start">
+                    <div>
+                        <h6 class="card-title mb-1">${com.autor}</h6>
+                        <p class="card-text mb-1">${com.texto}</p>
+                        <small class="text-muted">${new Date(com.fecha).toLocaleDateString('es-ES')}</small>
+                    </div>
+                    <div class="ms-3">
+                        <button class="btn btn-sm btn-outline-danger" onclick="eliminarComentario('${com.id}')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         `).join('');
     } catch (error) {
         console.error('Error cargando comentarios:', error);
         document.getElementById('listaComentarios').innerHTML = '<p class="text-danger">No se pudieron cargar los comentarios.</p>';
+    }
+}
+
+// Función para eliminar comentario
+async function eliminarComentario(comentarioId) {
+    if (!confirm('¿Eliminar este comentario?')) return;
+
+    try {
+        const response = await fetch(`/api/productos/${encodeURIComponent(productoActual.id)}/comentarios/${encodeURIComponent(comentarioId)}`, {
+            method: 'DELETE'
+        });
+
+        const text = await response.text();
+        if (!response.ok) {
+            throw new Error(`Servidor respondió ${response.status}: ${text}`);
+        }
+
+        // Recargar comentarios en la vista
+        cargarComentarios();
+    } catch (error) {
+        console.error('Error al eliminar comentario:', error);
+        alert('No se pudo eliminar el comentario.');
     }
 }
 

@@ -179,6 +179,34 @@ app.put('/api/productos/:id', (req, res) => {
   }
 });
 
+// DELETE - Eliminar comentario de un producto
+app.delete('/api/productos/:id/comentarios/:comentarioId', (req, res) => {
+  const { id, comentarioId } = req.params;
+  const db = leerDB();
+  const producto = db.productos.find(p => p.id === id);
+
+  if (!producto) {
+    return res.status(404).json({ error: 'Producto no encontrado' });
+  }
+
+  if (!Array.isArray(producto.comentarios) || producto.comentarios.length === 0) {
+    return res.status(404).json({ error: 'No hay comentarios' });
+  }
+
+  const idx = producto.comentarios.findIndex(c => c.id === comentarioId);
+  if (idx === -1) {
+    return res.status(404).json({ error: 'Comentario no encontrado' });
+  }
+
+  producto.comentarios.splice(idx, 1);
+
+  if (escribirDB(db)) {
+    return res.json({ success: true, mensaje: 'Comentario eliminado' });
+  } else {
+    return res.status(500).json({ error: 'Error al eliminar comentario' });
+  }
+});
+
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
