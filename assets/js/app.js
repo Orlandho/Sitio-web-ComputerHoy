@@ -106,7 +106,7 @@ function renderizarProductos() {
                         <i class="bi ${likeIcon}"></i> <span id="likes-${producto.id}">${producto.likes ?? 0}</span>
                     </button>
                     <button class="btn btn-sm btn-outline-secondary flex-grow-1" onclick="verDetalles('${producto.id}', event)">
-                        <i class="bi bi-chat"></i> Comentar
+                        <i class="bi bi-chat"></i> Comentar (<span id="comments-${producto.id}">${(producto.comentarios || []).length || 0}</span>)
                     </button>
                 </div>
             </div>

@@ -45,7 +45,7 @@
       "descripcion": "mensaje publicado",
       "fechaPublicacion": "2025-11-13",
       "likes": 0,
-      "vistas": 3,
+      "vistas": 4,
       "comentarios": [
         {
           "id": "com-1763057703993",
@@ -84,7 +84,8 @@
       "imagen": "https://www.olier.com.py/storage/sku/mueller-lavarropas-lavarropas-mueller-supertank-aquatec-8-kg-1-1-1736450864.png",
       "descripcion": "Programas rápidos y silenciosos. Ideal departamentos.",
       "fechaPublicacion": "2025-10-12",
-      "likes": 14
+      "likes": 14,
+      "vistas": 1
     },
     {
       "id": "prd-003",
