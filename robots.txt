@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Admin/privadas
+Disallow: /dashboard/
+Disallow: /publicar.html
+
+Sitemap: http://localhost:3000/sitemap.xml

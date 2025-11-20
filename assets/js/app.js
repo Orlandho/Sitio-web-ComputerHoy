@@ -261,8 +261,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const inputBuscar = document.getElementById('inputBuscar');
     if (inputBuscar) {
+        // Prefill from URL query (?q=)
+        const params = new URLSearchParams(window.location.search);
+        const q = params.get('q');
+        if (q) {
+            inputBuscar.value = q;
+            buscarProductos(q);
+        }
         inputBuscar.addEventListener('input', (e) => {
-            buscarProductos(e.target.value);
+            const value = e.target.value || '';
+            buscarProductos(value);
+            // Reflect in URL for better shareability and SEO SearchAction
+            const url = new URL(window.location.href);
+            if (value) {
+                url.searchParams.set('q', value);
+            } else {
+                url.searchParams.delete('q');
+            }
+            window.history.replaceState({}, '', url.toString());
         });
     }
 });
