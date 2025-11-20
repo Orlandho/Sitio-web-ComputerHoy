@@ -84,6 +84,22 @@ footer p {
     z-index: 600;
 }
 
+/* Asegurar comportamiento sticky cuando se usa .sticky-top */
+.navbar.sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 1030; /* por encima del contenido */
+}
+
+/* Asegurar comportamiento fijo cuando se usa .fixed-top */
+.navbar.fixed-top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+}
+
 .navbar .container-fluid {
     display: flex;
     justify-content: space-between;
