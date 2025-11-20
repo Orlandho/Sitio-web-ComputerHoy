@@ -1,6 +1,27 @@
 let productoActual = null;
 let modalEditarDetalles = null;
 
+// Gestión de likes por dispositivo usando localStorage (compartido con index)
+function getLikedSet() {
+    try {
+        const raw = localStorage.getItem('likedProducts');
+        const arr = raw ? JSON.parse(raw) : [];
+        return new Set(Array.isArray(arr) ? arr : []);
+    } catch {
+        return new Set();
+    }
+}
+
+function saveLikedSet(set) {
+    try {
+        localStorage.setItem('likedProducts', JSON.stringify(Array.from(set)));
+    } catch {}
+}
+
+function isLiked(productoId) {
+    return getLikedSet().has(productoId);
+}
+
 async function cargarDetalles() {
     const productoId = sessionStorage.getItem('productoActual');
     if (!productoId) {
@@ -29,6 +50,10 @@ async function cargarDetalles() {
 
 function mostrarDetalles() {
     const div = document.getElementById('detallesProducto');
+    const liked = isLiked(productoActual.id);
+    const likeBtnClass = liked ? 'btn-primary' : 'btn-outline-primary';
+    const likeIcon = liked ? 'bi-heart-fill' : 'bi-heart';
+    const likeAria = liked ? 'true' : 'false';
     
     div.innerHTML = `
         <div class="card">
@@ -71,8 +96,8 @@ function mostrarDetalles() {
                 <small class="text-muted">Publicado: ${new Date(productoActual.fechaPublicacion).toLocaleDateString('es-ES')}</small>
                 
                 <div class="mt-4">
-                    <button class="btn btn-primary" onclick="darLike('${productoActual.id}')">
-                        <i class="bi bi-heart"></i> Me gusta (${productoActual.likes})
+                    <button class="btn ${likeBtnClass}" aria-pressed="${likeAria}" onclick="toggleLike('${productoActual.id}')">
+                        <i class="bi ${likeIcon}"></i> Me gusta (<span id="likes-${productoActual.id}">${productoActual.likes || 0}</span>)
                     </button>
                 </div>
             </div>
@@ -226,17 +251,56 @@ async function eliminarComentario(comentarioId) {
     }
 }
 
-async function darLike(productoId) {
+// Compatibilidad hacia atrás
+async function darLike(productoId) { return toggleLike(productoId); }
+
+let likeInFlightDetalles = new Set();
+async function toggleLike(productoId) {
+    if (likeInFlightDetalles.has(productoId)) return;
+
+    const likedSet = getLikedSet();
+    const yaLeGusta = likedSet.has(productoId);
+    const endpoint = yaLeGusta ? `/api/productos/${encodeURIComponent(productoId)}/unlike` : `/api/productos/${encodeURIComponent(productoId)}/like`;
+
+    const btn = document.querySelector(`button[onclick*="${productoId}"]`);
+    if (btn) btn.disabled = true;
+    likeInFlightDetalles.add(productoId);
+
     try {
-        const response = await fetch(`/api/productos/${encodeURIComponent(productoId)}/like`, { method: 'PUT' });
-        if (!response.ok) throw new Error('Error al dar like: ' + response.status);
-        const data = await response.json();
-        if (data.success) {
-            productoActual.likes = data.likes;
-            mostrarDetalles();
+        const res = await fetch(endpoint, { method: 'PUT' });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error('No se pudo actualizar like');
+
+        // Actualizar modelo y contador visual
+        productoActual.likes = data.likes;
+        const likesEl = document.getElementById(`likes-${productoId}`);
+        if (likesEl) likesEl.textContent = data.likes;
+
+        if (yaLeGusta) {
+            likedSet.delete(productoId);
+            if (btn) {
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-outline-primary');
+                btn.setAttribute('aria-pressed', 'false');
+                const icon = btn.querySelector('i');
+                if (icon) icon.className = 'bi bi-heart';
+            }
+        } else {
+            likedSet.add(productoId);
+            if (btn) {
+                btn.classList.remove('btn-outline-primary');
+                btn.classList.add('btn-primary');
+                btn.setAttribute('aria-pressed', 'true');
+                const icon = btn.querySelector('i');
+                if (icon) icon.className = 'bi bi-heart-fill';
+            }
         }
-    } catch (error) {
-        console.error('Error:', error);
+        saveLikedSet(likedSet);
+    } catch (err) {
+        console.error('Error alternando like:', err);
+    } finally {
+        likeInFlightDetalles.delete(productoId);
+        if (btn) btn.disabled = false;
     }
 }
 

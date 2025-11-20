@@ -2,6 +2,27 @@ let productos = [];
 let activeCategory = '';
 let searchTerm = '';
 
+// Gestión de likes por dispositivo usando localStorage
+function getLikedSet() {
+    try {
+        const raw = localStorage.getItem('likedProducts');
+        const arr = raw ? JSON.parse(raw) : [];
+        return new Set(Array.isArray(arr) ? arr : []);
+    } catch {
+        return new Set();
+    }
+}
+
+function saveLikedSet(set) {
+    try {
+        localStorage.setItem('likedProducts', JSON.stringify(Array.from(set)));
+    } catch {}
+}
+
+function isLiked(productoId) {
+    return getLikedSet().has(productoId);
+}
+
 async function cargarProductos() {
     try {
         const response = await fetch('http://localhost:3000/api/productos');
@@ -55,7 +76,12 @@ function renderizarProductos() {
 
     msgVacio.classList.add('d-none');
 
-    feed.innerHTML = items.map(producto => `
+    feed.innerHTML = items.map(producto => {
+        const liked = isLiked(producto.id);
+        const likeBtnClass = liked ? 'btn-primary' : 'btn-outline-primary';
+        const likeIcon = liked ? 'bi-heart-fill' : 'bi-heart';
+        const likeAria = liked ? 'true' : 'false';
+        return `
         <div class="card card-producto cursor-pointer" onclick="verDetalles('${producto.id}')">
             <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}">
             <div class="card-body">
@@ -76,16 +102,16 @@ function renderizarProductos() {
                 <small class="text-muted d-block">Publicado: ${producto.fechaPublicacion ? new Date(producto.fechaPublicacion).toLocaleDateString('es-ES') : ''}</small>
                 <small class="text-muted d-block"><i class="bi bi-eye"></i> ${producto.vistas || 0} vistas</small>
                 <div class="mt-3 d-flex gap-2">
-                    <button class="btn btn-sm btn-outline-primary flex-grow-1" onclick="darLike('${producto.id}', event)">
-                        <i class="bi bi-heart"></i> <span id="likes-${producto.id}">${producto.likes ?? 0}</span>
+                    <button class="btn btn-sm ${likeBtnClass} flex-grow-1" aria-pressed="${likeAria}" onclick="toggleLike('${producto.id}', event)">
+                        <i class="bi ${likeIcon}"></i> <span id="likes-${producto.id}">${producto.likes ?? 0}</span>
                     </button>
                     <button class="btn btn-sm btn-outline-secondary flex-grow-1" onclick="verDetalles('${producto.id}', event)">
                         <i class="bi bi-chat"></i> Comentar
                     </button>
                 </div>
             </div>
-        </div>
-    `).join('');
+        </div>`;
+    }).join('');
 }
 
 function actualizarCategorias() {
@@ -141,22 +167,60 @@ function buscarProductos(termino) {
     renderizarProductos();
 }
 
+// Compatibilidad hacia atrás: redirigir a toggle
 async function darLike(productoId, event) {
-    if (event) event.stopPropagation();
-    try {
-        const response = await fetch(`http://localhost:3000/api/productos/${productoId}/like`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+    return toggleLike(productoId, event);
+}
 
-        const data = await response.json();
-        if (data.success) {
-            document.getElementById(`likes-${productoId}`).textContent = data.likes;
+// Alternar like por dispositivo
+let likeInFlight = new Set();
+async function toggleLike(productoId, event) {
+    if (event) event.stopPropagation();
+    if (likeInFlight.has(productoId)) return; // evitar doble click
+
+    const likedSet = getLikedSet();
+    const yaLeGusta = likedSet.has(productoId);
+    const endpoint = yaLeGusta ? `/api/productos/${encodeURIComponent(productoId)}/unlike` : `/api/productos/${encodeURIComponent(productoId)}/like`;
+
+    // deshabilitar botón visualmente
+    const btn = event?.currentTarget || document.querySelector(`button[onclick*="${productoId}"]`);
+    if (btn) btn.disabled = true;
+    likeInFlight.add(productoId);
+
+    try {
+        const res = await fetch(endpoint, { method: 'PUT' });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error('No se pudo actualizar like');
+
+        const likesEl = document.getElementById(`likes-${productoId}`);
+        if (likesEl) likesEl.textContent = data.likes;
+
+        // actualizar set local y estilos del botón
+        if (yaLeGusta) {
+            likedSet.delete(productoId);
+            if (btn) {
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-outline-primary');
+                btn.setAttribute('aria-pressed', 'false');
+                const icon = btn.querySelector('i');
+                if (icon) icon.className = 'bi bi-heart';
+            }
+        } else {
+            likedSet.add(productoId);
+            if (btn) {
+                btn.classList.remove('btn-outline-primary');
+                btn.classList.add('btn-primary');
+                btn.setAttribute('aria-pressed', 'true');
+                const icon = btn.querySelector('i');
+                if (icon) icon.className = 'bi bi-heart-fill';
+            }
         }
-    } catch (error) {
-        console.error('Error al dar like:', error);
+        saveLikedSet(likedSet);
+    } catch (err) {
+        console.error('Error alternando like:', err);
+    } finally {
+        likeInFlight.delete(productoId);
+        if (btn) btn.disabled = false;
     }
 }
 

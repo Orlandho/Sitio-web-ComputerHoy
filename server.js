@@ -110,6 +110,26 @@ app.put('/api/productos/:id/like', (req, res) => {
     }
 });
 
+// Quitar like (decrementar) sin bajar de 0
+app.put('/api/productos/:id/unlike', (req, res) => {
+  const { id } = req.params;
+  const db = leerDB();
+
+  const producto = db.productos.find(p => p.id === id);
+  if (!producto) {
+    return res.status(404).json({ error: 'Producto no encontrado' });
+  }
+
+  const current = Number(producto.likes) || 0;
+  producto.likes = current > 0 ? current - 1 : 0;
+
+  if (escribirDB(db)) {
+    return res.json({ success: true, likes: producto.likes });
+  } else {
+    return res.status(500).json({ error: 'Error al actualizar likes' });
+  }
+});
+
 app.post('/api/productos/:id/comentarios', (req, res) => {
     const { id } = req.params;
     const { autor, texto } = req.body;
