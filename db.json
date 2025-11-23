@@ -1,6 +1,62 @@
 {
   "productos": [
     {
+      "id": "prd-1763941863003",
+      "nombre": "Refactor Test Product",
+      "categoria": "  RefactorTest  1763941862973",
+      "precio": 500,
+      "badge": "refactor",
+      "etiquetas": [
+        "refactor"
+      ],
+      "imagen": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAABAAEHAREAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAf/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AP/Z",
+      "descripcion": "Refactor Test Description",
+      "fechaPublicacion": "2025-11-23",
+      "likes": 0
+    },
+    {
+      "id": "prd-1763937613079",
+      "nombre": "Visual Test Product",
+      "categoria": "  VisualTest  1763937613041",
+      "precio": 500,
+      "badge": "visual",
+      "etiquetas": [
+        "visual"
+      ],
+      "imagen": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
+      "descripcion": "Visual Test Description",
+      "fechaPublicacion": "2025-11-23",
+      "likes": 0
+    },
+    {
+      "id": "prd-1763937413225",
+      "nombre": "Test Product",
+      "categoria": "  TestCategory  1763937413175",
+      "precio": 100,
+      "badge": "test",
+      "etiquetas": [
+        "test"
+      ],
+      "imagen": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
+      "descripcion": "Test Description",
+      "fechaPublicacion": "2025-11-23",
+      "likes": 0
+    },
+    {
+      "id": "prd-1763937318547",
+      "nombre": "Test Product",
+      "categoria": "  TestCategory  1763937318490",
+      "precio": 100,
+      "badge": "test",
+      "etiquetas": [
+        "test"
+      ],
+      "imagen": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
+      "descripcion": "Test Description",
+      "fechaPublicacion": "2025-11-23",
+      "likes": 0
+    },
+    {
       "id": "prd-1763049756558",
       "nombre": "telefono xiaomi",
       "categoria": "Limpieza",
