@@ -46,7 +46,7 @@ function renderizarProductos() {
     if (!feed) return;
 
     const items = productos.filter(p => {
-        if (activeCategory && String(p.categoria || '').toLowerCase() !== String(activeCategory).toLowerCase()) {
+        if (activeCategory && String(p.categoria || '').trim().toLowerCase() !== String(activeCategory).toLowerCase()) {
             return false;
         }
 
