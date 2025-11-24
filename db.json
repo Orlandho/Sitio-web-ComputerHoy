@@ -1,6 +1,20 @@
 {
   "productos": [
     {
+      "id": "prd-1763943660314",
+      "nombre": "Final Test Product",
+      "categoria": "  FinalTest  1763943660277",
+      "precio": 500,
+      "badge": "final",
+      "etiquetas": [
+        "final"
+      ],
+      "imagen": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAABAAEHAREAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAf/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AP/Z",
+      "descripcion": "Final Test Description",
+      "fechaPublicacion": "2025-11-24",
+      "likes": 0
+    },
+    {
       "id": "prd-1763049756558",
       "nombre": "telefono xiaomi",
       "categoria": "Limpieza",

@@ -1,58 +1,80 @@
-document.getElementById('inputImagen').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    const previewDiv = document.getElementById('previewImagen');
+// Escuchamos el evento 'change' del input de imagen para mostrar la previsualización
+document.getElementById('inputImagen').addEventListener('change', function(evento) {
+    // Obtenemos el archivo seleccionado por el usuario
+    const archivo = evento.target.files[0];
+    const divPrevisualizacion = document.getElementById('previewImagen');
     
-    if (file) {
-        if (file.size > 5 * 1024 * 1024) {
-            alert('El archivo es muy grande. Máximo 5MB');
-            this.value = '';
-            previewDiv.innerHTML = '';
+    // Verificamos si existe un archivo
+    if (archivo) {
+        // Validamos que sea un archivo de tipo JPEG
+        if (archivo.type !== 'image/jpeg') {
+            alert('Error: Solo se permiten imágenes JPEG (.jpg, .jpeg)');
+            this.value = ''; // Limpiamos el input
+            divPrevisualizacion.innerHTML = '';
             return;
         }
 
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            previewDiv.innerHTML = `
-                <img src="${event.target.result}" alt="Preview" style="max-width: 300px; border-radius: 8px;">
+        // Validamos el tamaño (máximo 5MB)
+        const tamanoMaximo = 5 * 1024 * 1024; // 5MB en bytes
+        if (archivo.size > tamanoMaximo) {
+            alert('El archivo es muy grande. Máximo 5MB');
+            this.value = ''; // Limpiamos el input
+            divPrevisualizacion.innerHTML = '';
+            return;
+        }
+
+        // Usamos FileReader para leer la imagen y mostrarla
+        const lector = new FileReader();
+        lector.onload = function(e) {
+            // Insertamos la imagen en el div de previsualización
+            divPrevisualizacion.innerHTML = `
+                <img src="${e.target.result}" alt="Previsualización" style="max-width: 300px; border-radius: 8px;">
             `;
         };
-        reader.readAsDataURL(file);
+        // Leemos el archivo como URL de datos (Base64)
+        lector.readAsDataURL(archivo);
     } else {
-        previewDiv.innerHTML = '';
+        // Si no hay archivo, limpiamos la previsualización
+        divPrevisualizacion.innerHTML = '';
     }
 });
 
-document.getElementById('formPublicar').addEventListener('submit', async function(e) {
-    e.preventDefault();
+// Manejamos el envío del formulario
+document.getElementById('formPublicar').addEventListener('submit', async function(evento) {
+    evento.preventDefault(); // Evitamos que la página se recargue
 
     const inputImagen = document.getElementById('inputImagen');
-    const file = inputImagen.files[0];
+    const archivo = inputImagen.files[0];
 
-    if (!file) {
+    // Verificamos nuevamente que haya un archivo seleccionado
+    if (!archivo) {
         mostrarError('Por favor selecciona una imagen');
         return;
     }
 
-    // Convertir imagen a Base64
-    const reader = new FileReader();
-    reader.onload = async function(event) {
-        const imagenBase64 = event.target.result;
+    // Leemos el archivo para enviarlo al servidor
+    const lector = new FileReader();
+    lector.onload = async function(e) {
+        const imagenEnBase64 = e.target.result;
 
+        // Creamos el objeto producto con los datos del formulario
         const nuevoProducto = {
             nombre: document.getElementById('inputNombre').value,
             categoria: document.getElementById('inputCategoria').value,
             precio: document.getElementById('inputPrecio').value,
             badge: document.getElementById('inputBadge').value,
+            // Convertimos las etiquetas de string a array
             etiquetas: document.getElementById('inputEtiquetas').value
                 .split(',')
-                .map(e => e.trim())
-                .filter(e => e),
-            imagen: imagenBase64,
+                .map(etiqueta => etiqueta.trim()) // Quitamos espacios
+                .filter(etiqueta => etiqueta),   // Quitamos etiquetas vacías
+            imagen: imagenEnBase64,
             descripcion: document.getElementById('inputDescripcion').value
         };
 
         try {
-            const response = await fetch('http://localhost:3000/api/productos', {
+            // Enviamos los datos al servidor usando fetch (POST)
+            const respuesta = await fetch('http://localhost:3000/api/productos', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -60,18 +82,21 @@ document.getElementById('formPublicar').addEventListener('submit', async functio
                 body: JSON.stringify(nuevoProducto)
             });
 
-            const data = await response.json();
+            const datos = await respuesta.json();
 
-            if (response.ok) {
+            // Si la respuesta es exitosa
+            if (respuesta.ok) {
                 mostrarExito('¡Producto publicado exitosamente!');
-                document.getElementById('formPublicar').reset();
+                document.getElementById('formPublicar').reset(); // Limpiamos el formulario
                 document.getElementById('previewImagen').innerHTML = '';
 
+                // Redirigimos a la página principal después de 2 segundos
                 setTimeout(() => {
                     window.location.href = 'index.html';
                 }, 2000);
             } else {
-                mostrarError(data.error || 'Error al publicar el producto');
+                // Si hubo error en el servidor
+                mostrarError(datos.error || 'Error al publicar el producto');
             }
         } catch (error) {
             console.error('Error:', error);
@@ -79,9 +104,11 @@ document.getElementById('formPublicar').addEventListener('submit', async functio
         }
     };
 
-    reader.readAsDataURL(file);
+    // Iniciamos la lectura del archivo
+    lector.readAsDataURL(archivo);
 });
 
+// Función auxiliar para mostrar mensajes de éxito
 function mostrarExito(mensaje) {
     const div = document.getElementById('mensajeExito');
     div.textContent = mensaje;
@@ -89,6 +116,7 @@ function mostrarExito(mensaje) {
     document.getElementById('mensajeError').classList.add('d-none');
 }
 
+// Función auxiliar para mostrar mensajes de error
 function mostrarError(mensaje) {
     const div = document.getElementById('mensajeError');
     div.textContent = mensaje;
