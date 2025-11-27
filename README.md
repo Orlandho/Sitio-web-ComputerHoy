@@ -37,7 +37,6 @@ ComputerHoy es una aplicación web que simula una red social especializada en pr
 ## 📁 Estructura del Proyecto
 
 ```
-sitioweb/
 ├── index.html              # Página principal con feed
 ├── publicar.html           # Formulario de publicación
 ├── detalles.html           # Vista detallada de producto
@@ -70,12 +69,12 @@ sitioweb/
 1. Clonar el repositorio:
 ```bash
 git clone https://github.com/Orlandho/Sitio-web-ComputerHoy.git
-cd sitioweb
+cd Sitio-web-ComputerHoy
 ```
 
 2. Instalar dependencias:
 ```bash
-npm install express cors body-parser
+npm install
 ```
 
 3. Iniciar el servidor:
@@ -100,6 +99,7 @@ El servidor expone los siguientes endpoints:
 
 ### Interacciones
 - `PUT /api/productos/:id/like` - Incrementar likes
+- `PUT /api/productos/:id/unlike` - Decrementar likes
 - `PUT /api/productos/:id/vistas` - Incrementar vistas
 
 ### Comentarios
