@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/Orlandho/Sitio-web-ComputerHoy#readme",
   "dependencies": {
-    "body-parser": "^2.3.0",
+    "body-parser": "^2.4.0",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "playwright": "^1.63.0"
